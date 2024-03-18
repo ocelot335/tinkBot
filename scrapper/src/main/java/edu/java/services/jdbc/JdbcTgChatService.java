@@ -2,7 +2,7 @@ package edu.java.services.jdbc;
 
 import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.ChatReAddingException;
-import edu.java.domain.JdbcChatsDAO;
+import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.services.interfaces.TgChatService;
 import org.springframework.stereotype.Service;
 

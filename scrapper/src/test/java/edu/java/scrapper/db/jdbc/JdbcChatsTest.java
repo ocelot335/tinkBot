@@ -1,7 +1,7 @@
-package edu.java.scrapper.db;
+package edu.java.scrapper.db.jdbc;
 
-import edu.java.domain.JdbcChatsDAO;
-import edu.java.domain.dto.ChatDTO;
+import edu.java.domain.jdbc.JdbcChatsDAO;
+import edu.java.domain.jdbc.dto.ChatDTO;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,6 +56,10 @@ public class JdbcChatsTest extends IntegrationTest {
     @Transactional
     @Rollback
     void containsTest() {
-        //TODO
+        Assertions.assertFalse(chatRepository.contains(1L));
+        chatRepository.add(1L);
+        Assertions.assertTrue(chatRepository.contains(1L));
+        chatRepository.remove(1L);
+        Assertions.assertFalse(chatRepository.contains(1L));
     }
 }

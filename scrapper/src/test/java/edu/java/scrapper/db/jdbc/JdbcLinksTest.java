@@ -1,7 +1,7 @@
-package edu.java.scrapper.db;
+package edu.java.scrapper.db.jdbc;
 
-import edu.java.domain.JdbcLinksDAO;
-import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.jdbc.JdbcLinksDAO;
+import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,13 +56,18 @@ public class JdbcLinksTest extends IntegrationTest {
     @Transactional
     @Rollback
     void containsTest() {
-        //TODO
+        Assertions.assertFalse(linkRepository.contains("java"));
+        linkRepository.add("java");
+        Assertions.assertTrue(linkRepository.contains("java"));
+        linkRepository.remove("java");
+        Assertions.assertFalse(linkRepository.contains("java"));
     }
 
     @Test
     @Transactional
     @Rollback
     void getIdTest() {
-        //TODO
+        linkRepository.add("java");
+        Assertions.assertEquals(linkRepository.findAll().get(0).getId(),linkRepository.getId("java"));
     }
 }

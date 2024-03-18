@@ -11,7 +11,7 @@ public interface SubscribeService {
 
     //Предполагается, что это единственное место,
     //где проверяется валидность URL в модуле. Это ок?
-    void addTrackedURLs(Long chatId, String providedURL);
+    Long addTrackedURLs(Long chatId, String providedURL);
 
-    void removeTrackedURLs(Long chatId, String providedURL);
+    Long removeTrackedURLs(Long chatId, String providedURL);
 }

@@ -1,6 +1,8 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
-import edu.java.domain.dto.SubscribeDTO;
+import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.jdbc.dto.SubscribeDTO;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -32,7 +34,7 @@ public class JdbcSubscribesDAO {
     }
 
     //Нужна ли поддержка сериализации?, нужен ли Serializable?
-    public List<SubscribeDTO> findAll() {
+    public List<SubscribeDTO> findAllSubscribes() {
         String query = "SELECT * FROM subscribes;";
         return jdbcClient.sql(query).query((rs, rowNum) ->
             SubscribeDTO.builder().chatId(rs.getLong(chatIdColumnName))
@@ -42,11 +44,23 @@ public class JdbcSubscribesDAO {
     //Это ок, делать такой метод? Просто кажется,
     // лучше что пусть лучше бд будет обрабатывать это,
     // чем если сервер будет сначала принимать
-    // все записи, а потом фильтровать их
-    public List<SubscribeDTO> findAll(Long chatId) {
-        String query = "SELECT * FROM subscribes WHERE chatId=?;";
+    // все записи, а потом фильтровать их джойнить
+    public List<LinkDTO> findAllLinksByChatId(Long chatId) {
+        String query = "SELECT * FROM links WHERE links.id IN " +
+            "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";
         return jdbcClient.sql(query).param(chatId).query((rs, rowNum) ->
-            SubscribeDTO.builder().chatId(rs.getLong(chatIdColumnName))
-                .linkId(rs.getLong(linkIdColumnName)).build()).list();
+            new LinkDTO(rs.getLong("id"), rs.getString("url"),
+                rs.getObject("checked_at", OffsetDateTime.class)
+            )).list();
+    }
+
+    //Это ок, делать такой метод?
+    public boolean contains(Long chatId, Long urlId) {
+        String query = "SELECT COUNT(*) FROM subscribes WHERE chatId=? AND linkId=?";
+        int count = jdbcClient.sql(query)
+            .param(chatId)
+            .param(urlId)
+            .query(Integer.class).single();
+        return count > 0;
     }
 }

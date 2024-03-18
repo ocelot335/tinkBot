@@ -1,6 +1,6 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
-import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.jdbc.dto.LinkDTO;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

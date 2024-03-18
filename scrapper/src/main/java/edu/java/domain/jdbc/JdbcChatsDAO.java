@@ -1,6 +1,6 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
-import edu.java.domain.dto.ChatDTO;
+import edu.java.domain.jdbc.dto.ChatDTO;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.simple.JdbcClient;
