@@ -9,14 +9,14 @@ import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.services.interfaces.SubscribeService;
+import edu.java.services.interfaces.ISubscribeService;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JdbcSubscribeService implements SubscribeService {
+public class JdbcSubscribeService implements ISubscribeService {
 
     JdbcChatsDAO chatRepository;
     JdbcLinksDAO linkRepository;
