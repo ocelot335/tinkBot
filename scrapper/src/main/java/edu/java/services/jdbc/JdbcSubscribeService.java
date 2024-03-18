@@ -95,6 +95,11 @@ public class JdbcSubscribeService implements ISubscribeService {
         } catch (URISyntaxException ex) {
             throwBadURLException(providedURL);
         }
-        //TODO: check is allowed URL(github, stackoverflow, etc)
+        String hostName = url.getHost();
+        if (!"github.com".equals(hostName) &&
+            !"stackoverflow.com".equals(hostName)) {
+            throw new CantHandleURLException("Сервис не работает с данным сайтом: " + url);
+        }
+        //TODO: возможно как-то добавить через Spring, чтобы все имена сайтов подгружались?
     }
 }
