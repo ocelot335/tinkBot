@@ -51,3 +51,7 @@ alter table chats add primary key (telegramId);
 --changeset ocelot335:6
 alter table links add column checked_at timestamp with time zone not null default NOW();
 --rollback alter table links drop column checked_at;
+
+--changeset ocelot335:7
+alter table links add column last_updated_at timestamp with time zone not null default NOW();
+--rollback alter table links drop column last_updated_at;

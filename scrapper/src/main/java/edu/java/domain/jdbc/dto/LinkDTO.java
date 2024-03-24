@@ -9,7 +9,8 @@ import lombok.Data;
 public class LinkDTO {
     Long id;
     String url;
-    OffsetDateTime createdAt;
+    OffsetDateTime checkedAt;
+    OffsetDateTime lastUpdatedAt;
 
     public LinkDTO(String url) {
         this.url = url;

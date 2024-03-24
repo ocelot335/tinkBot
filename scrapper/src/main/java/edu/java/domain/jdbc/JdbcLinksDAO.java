@@ -36,7 +36,8 @@ public class JdbcLinksDAO {
         String query = "SELECT * FROM links;";
         return jdbcClient.sql(query).query((rs, rowNum) ->
             new LinkDTO(rs.getLong("id"), rs.getString("url"),
-                rs.getObject("checked_at", OffsetDateTime.class)
+                rs.getObject("checked_at", OffsetDateTime.class),
+                rs.getObject("last_updated_at", OffsetDateTime.class)
             )).list();
     }
 
@@ -54,5 +55,9 @@ public class JdbcLinksDAO {
             .param(url)
             .query(Integer.class).single();
         return count > 0;
+    }
+
+    public void updateLastUpdate(LinkDTO link, OffsetDateTime updatedTimeToUpdate) {
+
     }
 }

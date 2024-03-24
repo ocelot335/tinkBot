@@ -1,5 +1,7 @@
 package edu.java.services.interfaces;
 
+import java.time.Duration;
+
 public interface ILinkUpdateService {
-    void update();
+    void update(Duration forceCheckDelay);
 }

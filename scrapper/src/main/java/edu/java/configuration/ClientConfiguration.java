@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
 import edu.java.clients.BotClient;
-import edu.java.clients.GitHubClient;
-import edu.java.clients.StackOverflowClient;
+import edu.java.clients.apiclients.GitHubClient;
+import edu.java.clients.apiclients.StackOverflowClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

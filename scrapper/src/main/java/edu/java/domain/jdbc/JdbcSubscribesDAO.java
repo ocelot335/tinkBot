@@ -50,7 +50,8 @@ public class JdbcSubscribesDAO {
             "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";
         return jdbcClient.sql(query).param(chatId).query((rs, rowNum) ->
             new LinkDTO(rs.getLong("id"), rs.getString("url"),
-                rs.getObject("checked_at", OffsetDateTime.class)
+                rs.getObject("checked_at", OffsetDateTime.class),
+                rs.getObject("updated_at", OffsetDateTime.class)
             )).list();
     }
 
