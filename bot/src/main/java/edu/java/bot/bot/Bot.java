@@ -48,6 +48,7 @@ public class Bot {
         telegramBot.setUpdatesListener(updates -> {
             Integer lastId = UpdatesListener.CONFIRMED_UPDATES_NONE;
             for (Update update : updates) {
+                System.out.println(update);
                 if (!handleMessage(update)) {
                     return lastId;
                 }
