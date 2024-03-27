@@ -1,5 +1,6 @@
 package edu.java.services.jdbc;
 
+import edu.java.clients.apiclients.IAPIClient;
 import edu.java.controller.dto.LinkResponse;
 import edu.java.controller.exception.CantHandleURLException;
 import edu.java.controller.exception.ChatNotFoundException;
@@ -21,15 +22,18 @@ public class JdbcSubscribeService implements ISubscribeService {
     JdbcChatsDAO chatRepository;
     JdbcLinksDAO linkRepository;
     JdbcSubscribesDAO subscribesRepository;
+    IAPIClient[] clients;
 
     public JdbcSubscribeService(
         JdbcChatsDAO chatRepository,
         JdbcLinksDAO linkRepository,
-        JdbcSubscribesDAO subscribesRepository
+        JdbcSubscribesDAO subscribesRepository,
+        IAPIClient[] clients
     ) {
         this.chatRepository = chatRepository;
         this.linkRepository = linkRepository;
         this.subscribesRepository = subscribesRepository;
+        this.clients = clients;
     }
 
     @Override
@@ -95,11 +99,12 @@ public class JdbcSubscribeService implements ISubscribeService {
         } catch (URISyntaxException ex) {
             throwBadURLException(providedURL);
         }
-        String hostName = url.getHost();
-        if (!"github.com".equals(hostName) &&
-            !"stackoverflow.com".equals(hostName)) {
-            throw new CantHandleURLException("Сервис не работает с данным сайтом: " + url);
+
+        for (IAPIClient client : clients) {
+            if (client.isCorrectURL(providedURL)) {
+                return;
+            }
         }
-        //TODO: возможно как-то добавить через Spring, чтобы все имена сайтов подгружались?
+        throw new CantHandleURLException("Сервис не работает с данным сайтом: " + url);
     }
 }

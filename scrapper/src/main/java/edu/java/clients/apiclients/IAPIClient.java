@@ -5,5 +5,5 @@ import edu.java.domain.jdbc.dto.LinkDTO;
 
 public interface IAPIClient {
     public IAPIResponse getResponse(LinkDTO link);
-    public String getClientName();
+    boolean isCorrectURL(String url);
 }

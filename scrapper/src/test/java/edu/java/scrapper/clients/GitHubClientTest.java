@@ -40,13 +40,12 @@ public class GitHubClientTest {
         wireMockServer.stubFor(get(urlPathEqualTo("/repos/owner/repo"))
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
-                .withBody("{\"name\": \"Test Repo\", \"description\": \"Test Description\", \"pushed_at\": \"2077-11-23T00:00:00Z\"}")
+                .withBody(
+                    "{\"name\": \"Test Repo\", \"description\": \"Test Description\", \"pushed_at\": \"2077-11-23T00:00:00Z\"}")
             ));
 
         GitHubClient gitHubClient = new GitHubClient(webClient);
-        Mono<GitHubResponse> responseMono = gitHubClient.fetchRepository("owner", "repo");
-
-        GitHubResponse response = responseMono.block();
+        GitHubResponse response = gitHubClient.fetchRepository("owner", "repo");
 
         Assertions.assertEquals("Test Repo", response.getName());
         Assertions.assertEquals("Test Description", response.getDescription());

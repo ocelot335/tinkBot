@@ -45,9 +45,8 @@ public class StackOverflowClientTest {
             ));
 
         StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
-        Mono<StackOverflowResponse> responseMono = stackOverflowClient.fetchQuestion(42);
 
-        StackOverflowResponse response = responseMono.block();
+        StackOverflowResponse response = stackOverflowClient.fetchQuestion("42");
         Assertions.assertEquals("Test Question", response.getItems().get(0).getTitle());
         Assertions.assertEquals("2003-11-23T00:00Z", response.getItems().get(0).getLastActivityDate().toString());
     }

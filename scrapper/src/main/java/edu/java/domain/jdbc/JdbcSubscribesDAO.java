@@ -44,7 +44,9 @@ public class JdbcSubscribesDAO {
     //Это ок, делать такой метод? Просто кажется,
     // лучше что пусть лучше бд будет обрабатывать это,
     // чем если сервер будет сначала принимать
-    // все записи, а потом фильтровать их джойнить
+    // все записи, а потом фильтровать их джойнить.
+    //
+    // У нас ведь это нужно только по запросу пользователя.
     public List<LinkDTO> findAllLinksByChatId(Long chatId) {
         String query = "SELECT * FROM links WHERE links.id IN " +
             "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";

@@ -6,7 +6,8 @@ import edu.java.domain.jdbc.dto.LinkDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GitHubClient implements IAPIClient {
 
@@ -17,20 +18,26 @@ public class GitHubClient implements IAPIClient {
         this.webClient = webClient;
     }
 
-    public Mono<GitHubResponse> fetchRepository(String owner, String repo) {
+    public GitHubResponse fetchRepository(String owner, String repo) {
         return webClient.get()
             .uri("/repos/{owner}/{repo}", owner, repo)
             .retrieve()
-            .bodyToMono(GitHubResponse.class);
+            .bodyToMono(GitHubResponse.class).block();
     }
 
     @Override
     public IAPIResponse getResponse(LinkDTO link) {
-        return null;
+        Pattern gitHubPattern = Pattern.compile("^https?://github\\.com/([^/]+)/([^/]+)");
+        Matcher gitHubMatcher = gitHubPattern.matcher(link.getUrl());
+        String owner = gitHubMatcher.group(1);
+        String repo = gitHubMatcher.group(2);
+        return fetchRepository(owner, repo);
     }
 
     @Override
-    public String getClientName() {
-        return "github.com";
+    public boolean isCorrectURL(String url) {
+        Pattern gitHubPattern = Pattern.compile("^https?://github\\.com/([^/]+)/([^/]+)");
+        Matcher gitHubMatcher = gitHubPattern.matcher(url);
+        return gitHubMatcher.find();
     }
 }
