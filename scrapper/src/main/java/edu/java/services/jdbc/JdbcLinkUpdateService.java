@@ -9,6 +9,7 @@ import edu.java.domain.jdbc.dto.SubscribeDTO;
 import edu.java.services.interfaces.ILinkUpdateService;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -51,8 +52,15 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
     private boolean check(LinkDTO link) {
         for (IAPIClient client : apiClients) {
             if (client.isCorrectURL(link.getUrl())) {
-                if (link.getLastUpdatedAt().isBefore(client.getResponse(link).getLastUpdatedAt())) {
-                    linkRepository.updateLastUpdate(link, client.getResponse(link).getLastUpdatedAt());
+                OffsetDateTime lastUpdatedAt;
+                try {
+                    lastUpdatedAt = client.getResponse(link).getLastUpdatedAt();
+                } catch (WebClientResponseException e) {
+                    continue;
+                    //TODO::handle not existing urls ?? Maybe delete from DataBase?
+                }
+                if (link.getLastUpdatedAt().isBefore(lastUpdatedAt)) {
+                    linkRepository.updateLastUpdate(link, lastUpdatedAt);
                     return true;
                 }
                 break;

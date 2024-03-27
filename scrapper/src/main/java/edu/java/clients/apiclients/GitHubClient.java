@@ -29,6 +29,7 @@ public class GitHubClient implements IAPIClient {
     public IAPIResponse getResponse(LinkDTO link) {
         Pattern gitHubPattern = Pattern.compile("^https?://github\\.com/([^/]+)/([^/]+)");
         Matcher gitHubMatcher = gitHubPattern.matcher(link.getUrl());
+        gitHubMatcher.find();
         String owner = gitHubMatcher.group(1);
         String repo = gitHubMatcher.group(2);
         return fetchRepository(owner, repo);

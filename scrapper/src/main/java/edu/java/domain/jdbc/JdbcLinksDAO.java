@@ -67,7 +67,7 @@ public class JdbcLinksDAO {
     //Это ок, делать такой метод?
     @Transactional
     public void updateCheckedAt(LinkDTO link, OffsetDateTime updatedCheckedAt) {
-        String query = "UPDATE links SET last_updated_at=? WHERE url=?;";
+        String query = "UPDATE links SET checked_at=? WHERE url=?;";
         jdbcClient.sql(query).param(updatedCheckedAt).param(link.getUrl()).update();
     }
 }

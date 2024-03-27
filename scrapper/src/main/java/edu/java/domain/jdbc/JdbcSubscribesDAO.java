@@ -53,7 +53,7 @@ public class JdbcSubscribesDAO {
         return jdbcClient.sql(query).param(chatId).query((rs, rowNum) ->
             new LinkDTO(rs.getLong("id"), rs.getString("url"),
                 rs.getObject("checked_at", OffsetDateTime.class),
-                rs.getObject("updated_at", OffsetDateTime.class)
+                rs.getObject("last_updated_at", OffsetDateTime.class)
             )).list();
     }
 
