@@ -42,13 +42,11 @@ public class Bot {
         this.scrapperClient = scrapperClient;
 
         telegramBot = new TelegramBot(applicationConfig.telegramToken());
-
         addMenu();
 
         telegramBot.setUpdatesListener(updates -> {
             Integer lastId = UpdatesListener.CONFIRMED_UPDATES_NONE;
             for (Update update : updates) {
-                System.out.println(update);
                 if (!handleMessage(update)) {
                     return lastId;
                 }
@@ -74,8 +72,8 @@ public class Bot {
     }
 
     private boolean handleMessage(Update update) {
-        if (update == null || update.message() == null || update.message().chat() == null ||
-            handleChatDeleted(update)) {
+        if (update == null || handleChatDeleted(update) || update.message() == null ||
+            update.message().chat() == null) {
             return true;
         }
 
@@ -83,7 +81,7 @@ public class Bot {
         try {
             requestForUser = commandService.processCommand(update);
         } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
+            log.error(e.getMessage());
             return false;
         }
         if (requestForUser != null) {
@@ -93,9 +91,9 @@ public class Bot {
     }
 
     private boolean handleChatDeleted(Update update) {
-        if (update.message().leftChatMember() != null) {
+        if (update.myChatMember() != null &&
+            update.myChatMember().newChatMember().status().equals(ChatMember.Status.kicked)) {
             long chatId = update.myChatMember().chat().id();
-            log.info("Гуд!!");
             scrapperClient.deleteTgChat(chatId);
             return true;
         }
