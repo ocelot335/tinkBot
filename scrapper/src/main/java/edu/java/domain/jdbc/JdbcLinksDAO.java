@@ -1,6 +1,7 @@
 package edu.java.domain.jdbc;
 
 import edu.java.domain.jdbc.dto.LinkDTO;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,16 @@ public class JdbcLinksDAO {
     //Как я понимаю JdbcClient это не поддерживает?
     public List<LinkDTO> findAll() {
         String query = "SELECT * FROM links;";
+        return jdbcClient.sql(query).query((rs, rowNum) ->
+            new LinkDTO(rs.getLong("id"), rs.getString("url"),
+                rs.getObject("checked_at", OffsetDateTime.class),
+                rs.getObject("last_updated_at", OffsetDateTime.class)
+            )).list();
+    }
+
+    public List<LinkDTO> findAllFilteredToCheck(Duration forceCheckDelay) {
+        String interval = "'" + forceCheckDelay.getSeconds() + " seconds'";
+        String query = "SELECT * FROM links WHERE checked_at + interval " + interval + " <= NOW();";
         return jdbcClient.sql(query).query((rs, rowNum) ->
             new LinkDTO(rs.getLong("id"), rs.getString("url"),
                 rs.getObject("checked_at", OffsetDateTime.class),

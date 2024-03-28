@@ -35,10 +35,13 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
 
     @Override
     public void update(Duration forceCheckDelay) {
-        List<LinkDTO> links = linkRepository.findAll();
         OffsetDateTime now = OffsetDateTime.now();
+        /*
+        List<LinkDTO> links = linkRepository.findAll();
         List<LinkDTO> linksToCheck = links.stream().filter(link -> Duration.between(link.getCheckedAt(), now)
             .compareTo(forceCheckDelay) >= 0).toList();
+        */
+        List<LinkDTO> linksToCheck = linkRepository.findAllFilteredToCheck(forceCheckDelay);
         List<SubscribeDTO> subscribes = subscribesRepository.findAllSubscribes();
         for (LinkDTO link : linksToCheck) {
             linkRepository.updateCheckedAt(link, now);
