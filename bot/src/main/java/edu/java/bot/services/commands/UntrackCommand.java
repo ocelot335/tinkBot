@@ -2,10 +2,8 @@ package edu.java.bot.services.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.clients.ScrapperClient;
-import edu.java.bot.data.UsersTracks;
 import edu.java.bot.data.UsersWaiting;
 import edu.java.bot.services.ICommand;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +12,8 @@ public class UntrackCommand implements ICommand {
     final private UsersWaiting usersWaiting;
     private static final String REQUEST = "Пожалуйста, введите URL, который вы хотите перестать трэкать:";
     private static final String URL_REMOVED = "URL был удалён";
-    @Autowired UntrackCommand(ScrapperClient scrapperClient, UsersWaiting usersWaiting) {
+
+    UntrackCommand(ScrapperClient scrapperClient, UsersWaiting usersWaiting) {
         this.scrapperClient = scrapperClient;
         this.usersWaiting = usersWaiting;
     }

@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class JdbcLinksDAO {
     JdbcClient jdbcClient;
+    private static final String URL_COLUMN_NAME = "url";
+    private static final String CHECKED_AT_COLUMN_NAME = "checked_at";
+    private static final String LAST_UPDATED_AT_COLUMN_NAME = "last_updated_at";
 
     @Autowired
     public JdbcLinksDAO(JdbcClient jdbcClient) {
@@ -36,9 +39,9 @@ public class JdbcLinksDAO {
     public List<LinkDTO> findAll() {
         String query = "SELECT * FROM links;";
         return jdbcClient.sql(query).query((rs, rowNum) ->
-            new LinkDTO(rs.getLong("id"), rs.getString("url"),
-                rs.getObject("checked_at", OffsetDateTime.class),
-                rs.getObject("last_updated_at", OffsetDateTime.class)
+            new LinkDTO(rs.getLong("id"), rs.getString(URL_COLUMN_NAME),
+                rs.getObject(CHECKED_AT_COLUMN_NAME, OffsetDateTime.class),
+                rs.getObject(LAST_UPDATED_AT_COLUMN_NAME, OffsetDateTime.class)
             )).list();
     }
 
@@ -46,9 +49,9 @@ public class JdbcLinksDAO {
         String interval = "'" + forceCheckDelay.getSeconds() + " seconds'";
         String query = "SELECT * FROM links WHERE checked_at + interval " + interval + " <= NOW();";
         return jdbcClient.sql(query).query((rs, rowNum) ->
-            new LinkDTO(rs.getLong("id"), rs.getString("url"),
-                rs.getObject("checked_at", OffsetDateTime.class),
-                rs.getObject("last_updated_at", OffsetDateTime.class)
+            new LinkDTO(rs.getLong("id"), rs.getString(URL_COLUMN_NAME),
+                rs.getObject(CHECKED_AT_COLUMN_NAME, OffsetDateTime.class),
+                rs.getObject(LAST_UPDATED_AT_COLUMN_NAME, OffsetDateTime.class)
             )).list();
     }
 

@@ -1,11 +1,8 @@
 package edu.java.scheduler;
 
 import edu.java.configuration.ApplicationConfig;
-import java.util.List;
-import java.util.logging.Logger;
-import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.services.interfaces.ILinkUpdateService;
+import java.util.logging.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

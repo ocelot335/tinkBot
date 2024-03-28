@@ -72,8 +72,8 @@ public class Bot {
     }
 
     private boolean handleMessage(Update update) {
-        if (update == null || handleChatDeleted(update) || update.message() == null ||
-            update.message().chat() == null) {
+        if (update == null || handleChatDeleted(update) || update.message() == null
+            || update.message().chat() == null) {
             return true;
         }
 
@@ -91,8 +91,8 @@ public class Bot {
     }
 
     private boolean handleChatDeleted(Update update) {
-        if (update.myChatMember() != null &&
-            update.myChatMember().newChatMember().status().equals(ChatMember.Status.kicked)) {
+        if (update.myChatMember() != null
+            && update.myChatMember().newChatMember().status().equals(ChatMember.Status.kicked)) {
             long chatId = update.myChatMember().chat().id();
             scrapperClient.deleteTgChat(chatId);
             return true;

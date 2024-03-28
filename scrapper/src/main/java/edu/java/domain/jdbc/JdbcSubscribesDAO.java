@@ -48,8 +48,8 @@ public class JdbcSubscribesDAO {
     //
     // У нас ведь это нужно только по запросу пользователя.
     public List<LinkDTO> findAllLinksByChatId(Long chatId) {
-        String query = "SELECT * FROM links WHERE links.id IN " +
-            "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";
+        String query = "SELECT * FROM links WHERE links.id IN "
+            + "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";
         return jdbcClient.sql(query).param(chatId).query((rs, rowNum) ->
             new LinkDTO(rs.getLong("id"), rs.getString("url"),
                 rs.getObject("checked_at", OffsetDateTime.class),

@@ -1,12 +1,8 @@
 package edu.java.bot.services.commands;
 
 import com.pengrad.telegrambot.model.Update;
-import edu.java.bot.clients.ScrapperApiException;
 import edu.java.bot.clients.ScrapperClient;
-import edu.java.bot.clients.dto.ApiErrorResponse;
-import edu.java.bot.data.UsersTracks;
 import edu.java.bot.services.ICommand;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

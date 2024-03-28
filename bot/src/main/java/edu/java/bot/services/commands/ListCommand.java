@@ -4,9 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.clients.dto.LinkResponse;
 import edu.java.bot.clients.dto.ListLinkResponse;
-import edu.java.bot.data.UsersTracks;
 import edu.java.bot.services.ICommand;
-import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
