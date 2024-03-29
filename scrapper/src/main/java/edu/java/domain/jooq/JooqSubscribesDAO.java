@@ -2,12 +2,10 @@ package edu.java.domain.jooq;
 
 import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.domain.jdbc.dto.SubscribeDTO;
+import java.util.List;
 import org.jooq.DSLContext;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.OffsetDateTime;
-import java.util.List;
 import static edu.java.scrapper.domain.jooq.Tables.LINKS;
 import static edu.java.scrapper.domain.jooq.Tables.SUBSCRIBES;
 

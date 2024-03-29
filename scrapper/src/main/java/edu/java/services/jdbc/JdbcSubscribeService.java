@@ -14,7 +14,6 @@ import edu.java.services.interfaces.ISubscribeService;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 public class JdbcSubscribeService implements ISubscribeService {
 

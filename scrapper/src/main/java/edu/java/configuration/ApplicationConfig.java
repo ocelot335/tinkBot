@@ -16,14 +16,14 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull BasicURLs basicURLs,
     @NotNull AccessType databaseAccessType
-    ) {
-
+) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
     public record BasicURLs(String gitHubBasicURL, String stackOverflowBasicURL, String botBasicURL) {
     }
+
     public enum AccessType {
         JDBC, JPA, JOOQ
     }

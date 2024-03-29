@@ -1,12 +1,11 @@
 package edu.java.domain.jooq;
 
 import edu.java.domain.jdbc.dto.ChatDTO;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 import static edu.java.scrapper.domain.jooq.Tables.CHATS;
 
 @Repository

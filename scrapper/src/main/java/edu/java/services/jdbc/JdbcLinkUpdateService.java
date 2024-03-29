@@ -11,9 +11,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
 
 public class JdbcLinkUpdateService implements ILinkUpdateService {
     private JdbcLinksDAO linkRepository;

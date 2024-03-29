@@ -4,7 +4,6 @@ import edu.java.domain.jdbc.dto.LinkDTO;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.h2.api.Interval;
 import org.jooq.DSLContext;
 import org.jooq.types.DayToSecond;
 import org.jooq.types.YearToMonth;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.jooq.Tables.LINKS;
-import static org.jooq.impl.DSL.field;
 
 @Repository
 public class JooqLinksDAO {

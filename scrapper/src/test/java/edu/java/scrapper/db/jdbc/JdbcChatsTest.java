@@ -3,13 +3,13 @@ package edu.java.scrapper.db.jdbc;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.dto.ChatDTO;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @SpringBootTest
 public class JdbcChatsTest extends IntegrationTest {

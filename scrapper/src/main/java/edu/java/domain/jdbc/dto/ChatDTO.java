@@ -6,7 +6,6 @@ import lombok.Data;
 public class ChatDTO {
     Long telegramId;
 
-
     public ChatDTO(Long telegramId) {
         this.telegramId = telegramId;
     }

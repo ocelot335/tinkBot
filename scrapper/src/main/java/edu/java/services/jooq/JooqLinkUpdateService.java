@@ -2,18 +2,16 @@ package edu.java.services.jooq;
 
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.IAPIClient;
-import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.domain.jdbc.dto.SubscribeDTO;
 import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.domain.jooq.JooqSubscribesDAO;
 import edu.java.services.interfaces.ILinkUpdateService;
-import lombok.SneakyThrows;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import lombok.SneakyThrows;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class JooqLinkUpdateService implements ILinkUpdateService {
     private JooqLinksDAO linkRepository;

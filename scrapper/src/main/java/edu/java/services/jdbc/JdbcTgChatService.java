@@ -4,7 +4,6 @@ import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.ChatReAddingException;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.services.interfaces.ITgChatService;
-import org.springframework.stereotype.Service;
 
 public class JdbcTgChatService implements ITgChatService {
     JdbcChatsDAO chatRepository;

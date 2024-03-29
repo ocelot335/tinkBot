@@ -6,14 +6,14 @@ import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.domain.jdbc.dto.SubscribeDTO;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 public class JdbcSubscribesTest extends IntegrationTest {
@@ -100,16 +100,16 @@ public class JdbcSubscribesTest extends IntegrationTest {
         subscribeRepository.add(2L, linkIdKotlin);
         List<LinkDTO> linksFirst = subscribeRepository.findAllLinksByChatId(1L);
         Assertions.assertTrue(Objects.equals(linksFirst.get(0).getId(), linkIdKotlin) ||
-                Objects.equals(linksFirst.get(1).getId(), linkIdKotlin));
+            Objects.equals(linksFirst.get(1).getId(), linkIdKotlin));
         Assertions.assertTrue(Objects.equals(linksFirst.get(0).getId(), linkIdJava) ||
-                Objects.equals(linksFirst.get(1).getId(), linkIdJava));
-        Assertions.assertEquals(2,linksFirst.size());
+            Objects.equals(linksFirst.get(1).getId(), linkIdJava));
+        Assertions.assertEquals(2, linksFirst.size());
 
         List<LinkDTO> linksSecond = subscribeRepository.findAllLinksByChatId(2L);
         Assertions.assertEquals(linksSecond.get(0).getId(), linkIdKotlin);
-        Assertions.assertEquals(1,linksSecond.size());
+        Assertions.assertEquals(1, linksSecond.size());
 
         List<SubscribeDTO> links = subscribeRepository.findAllSubscribes();
-        Assertions.assertEquals(3,links.size());
+        Assertions.assertEquals(3, links.size());
     }
 }

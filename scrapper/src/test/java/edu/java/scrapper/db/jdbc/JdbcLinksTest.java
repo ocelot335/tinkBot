@@ -3,13 +3,13 @@ package edu.java.scrapper.db.jdbc;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @SpringBootTest
 public class JdbcLinksTest extends IntegrationTest {
@@ -68,6 +68,6 @@ public class JdbcLinksTest extends IntegrationTest {
     @Rollback
     void getIdTest() {
         linkRepository.add("java");
-        Assertions.assertEquals(linkRepository.findAll().get(0).getId(),linkRepository.getId("java"));
+        Assertions.assertEquals(linkRepository.findAll().get(0).getId(), linkRepository.getId("java"));
     }
 }

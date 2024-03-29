@@ -2,7 +2,6 @@ package edu.java.services.jooq;
 
 import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.ChatReAddingException;
-import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jooq.JooqChatsDAO;
 import edu.java.services.interfaces.ITgChatService;
 
