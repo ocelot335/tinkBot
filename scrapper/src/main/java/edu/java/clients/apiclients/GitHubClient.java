@@ -1,6 +1,6 @@
 package edu.java.clients.apiclients;
 
-import edu.java.clients.responses.GitHubResponse;
+import edu.java.clients.responses.github.GitHubRepositoryResponse;
 import edu.java.clients.responses.IAPIResponse;
 import edu.java.domain.jdbc.dto.LinkDTO;
 import java.util.regex.Matcher;
@@ -18,11 +18,11 @@ public class GitHubClient implements IAPIClient {
         this.webClient = webClient;
     }
 
-    public GitHubResponse fetchRepository(String owner, String repo) {
+    public GitHubRepositoryResponse fetchRepository(String owner, String repo) {
         return webClient.get()
                 .uri("/repos/{owner}/{repo}", owner, repo)
                 .retrieve()
-                .bodyToMono(GitHubResponse.class).block();
+                .bodyToMono(GitHubRepositoryResponse.class).block();
     }
 
     @Override

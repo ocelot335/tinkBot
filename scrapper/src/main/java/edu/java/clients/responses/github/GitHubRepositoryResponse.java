@@ -1,13 +1,15 @@
-package edu.java.clients.responses;
+package edu.java.clients.responses.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
+
+import edu.java.clients.responses.IAPIResponse;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubResponse implements IAPIResponse {
+public class GitHubRepositoryResponse implements IAPIResponse {
     private String name;
     private String description;
     @JsonProperty("pushed_at")
