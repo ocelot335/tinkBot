@@ -1,16 +1,19 @@
 package edu.java.domain.jooq;
 
 import edu.java.domain.jdbc.dto.LinkDTO;
-import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.h2.api.Interval;
+import org.jooq.DSLContext;
+import org.jooq.types.DayToSecond;
+import org.jooq.types.YearToMonth;
+import org.jooq.types.YearToSecond;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.jooq.Tables.LINKS;
-import static edu.java.scrapper.domain.jooq.Tables.SUBSCRIBES;
+import static org.jooq.impl.DSL.field;
 
 @Repository
 public class JooqLinksDAO {
@@ -39,9 +42,13 @@ public class JooqLinksDAO {
     }
 
     public List<LinkDTO> findAllFilteredToCheck(Duration forceCheckDelay) {
-        return dslContext.selectFrom(LINKS)
-            .where(LINKS.CHECKED_AT.add(forceCheckDelay.getSeconds()).le(OffsetDateTime.now()))
+        List<LinkDTO> links = dslContext.selectFrom(LINKS)
+            .where(LINKS.CHECKED_AT.plus(new YearToSecond(
+                new YearToMonth(),
+                new DayToSecond(0, 0, 0, (int) forceCheckDelay.getSeconds())
+            )).le(OffsetDateTime.now()))
             .fetchInto(LinkDTO.class);
+        return links;
     }
 
     public Long getId(String url) {
