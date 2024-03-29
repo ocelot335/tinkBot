@@ -1,15 +1,17 @@
-package edu.java.services.jdbc;
+package edu.java.services.jooq;
 
 import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.ChatReAddingException;
 import edu.java.domain.jdbc.JdbcChatsDAO;
+import edu.java.domain.jooq.JooqChatsDAO;
 import edu.java.services.interfaces.ITgChatService;
-import org.springframework.stereotype.Service;
 
-public class JdbcTgChatService implements ITgChatService {
-    JdbcChatsDAO chatRepository;
+//Этот сервис вообще никак не отличается от того, который был для jdbc, непонятно зачем вообще
+// делать реализации для сервисов, главное кажется ведь для репозиториев?
+public class JooqTgChatService implements ITgChatService {
+    JooqChatsDAO chatRepository;
 
-    public JdbcTgChatService(JdbcChatsDAO chatRepository) {
+    public JooqTgChatService(JooqChatsDAO chatRepository) {
         this.chatRepository = chatRepository;
     }
 
