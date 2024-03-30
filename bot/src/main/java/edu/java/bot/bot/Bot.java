@@ -114,6 +114,6 @@ public class Bot {
 
     private String getUpdateMessage(String url, String description) {
         //TODO:: how should update message look like?
-        return "Обновление на " + url + "\nОписание: " + description;
+        return "Обновление на " + url + "\nОписание:\n" + description;
     }
 }

@@ -1,6 +1,7 @@
 package edu.java.services.jooq;
 
 import edu.java.clients.BotClient;
+import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jdbc.dto.LinkDTO;
 import edu.java.domain.jdbc.dto.SubscribeDTO;
@@ -10,6 +11,7 @@ import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import lombok.SneakyThrows;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -42,10 +44,11 @@ public class JooqLinkUpdateService implements ILinkUpdateService {
         List<LinkDTO> linksToCheck = linkRepository.findAllFilteredToCheck(forceCheckDelay);
         List<SubscribeDTO> subscribes = subscribesRepository.findAllSubscribes();
         for (LinkDTO link : linksToCheck) {
-            linkRepository.updateCheckedAt(link, now);
             if (check(link)) {
-                notifyUsers(link, subscribes);
+                String description = getDescription(link);
+                notifyUsers(link, subscribes, description);
             }
+            linkRepository.updateCheckedAt(link, now);
         }
     }
 
@@ -70,10 +73,25 @@ public class JooqLinkUpdateService implements ILinkUpdateService {
         return false;
     }
 
-    private void notifyUsers(LinkDTO link, List<SubscribeDTO> subscribes) {
+    private String getDescription(LinkDTO link) {
+        for (IAPIClient client : apiClients) {
+            if (client.isCorrectURL(link.getUrl())) {
+                if (client instanceof GitHubClient) {
+                    return ((GitHubClient) client).getDescription(link, link.getLastUpdatedAt());
+                } else {
+                    break;
+                }
+            }
+        }
+
+        //Default description
+        return "Обновление произошло в " + link.getLastUpdatedAt().toString();
+    }
+
+    private void notifyUsers(LinkDTO link, List<SubscribeDTO> subscribes, String description) {
         List<Long> usersToNotify =
-            subscribes.stream().filter(subscribeDTO -> subscribeDTO.getLinkId() == link.getId())
+            subscribes.stream().filter(subscribeDTO -> Objects.equals(subscribeDTO.getLinkId(), link.getId()))
                 .map(SubscribeDTO::getChatId).toList();
-        botClient.postUpdates(link.getId(), link.getUrl(), "TODO", usersToNotify);
+        botClient.postUpdates(link.getId(), link.getUrl(), description, usersToNotify);
     }
 }
