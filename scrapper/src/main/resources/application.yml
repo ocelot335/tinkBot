@@ -4,13 +4,17 @@ app:
     interval: 10s
     force-check-delay: 10s
   basic-urls:
-    git-hub-basic-url: https://api.github.com
-    stack-overflow-basic-url: https://api.stackexchange.com/2.3
-    bot-basic-url: http://localhost:8090
+    git-hub-basic-url: ${GITHUB_BASE_URL:https://api.github.com}
+    stack-overflow-basic-url: ${STACKOVERFLOW_BASE_URL:https://api.stackexchange.com/2.3/}
+    bot-basic-url: ${BOT_BASE_URL:http://localhost:8090}
 
 spring:
   application:
     name: scrapper
+  datasource:
+    url: jdbc:postgresql://localhost:54320/scrapper
+    username: postgres
+    password: postgres
 
 server:
   port: 8080
