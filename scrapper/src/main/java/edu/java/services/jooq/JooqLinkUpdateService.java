@@ -3,8 +3,8 @@ package edu.java.services.jooq;
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.domain.jooq.JooqSubscribesDAO;
 import edu.java.services.interfaces.ILinkUpdateService;
@@ -59,7 +59,7 @@ public class JooqLinkUpdateService implements ILinkUpdateService {
                 OffsetDateTime lastUpdatedAt;
                 try {
                     lastUpdatedAt = client.getResponse(link).getLastUpdatedAt();
-                } catch (WebClientResponseException e) {
+                } catch (WebClientResponseException | NullPointerException e) {
                     continue;
                     //TODO::handle not existing urls ?? Maybe delete from DataBase?
                 }

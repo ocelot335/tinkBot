@@ -1,4 +1,4 @@
-package edu.java.services.jooq;
+package edu.java.services.jpa;
 
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.controller.dto.LinkResponse;
@@ -7,38 +7,42 @@ import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.LinkNotFoundException;
 import edu.java.controller.exception.LinkReAddingException;
 import edu.java.domain.dto.LinkDTO;
-import edu.java.domain.jooq.JooqChatsDAO;
-import edu.java.domain.jooq.JooqLinksDAO;
-import edu.java.domain.jooq.JooqSubscribesDAO;
+import edu.java.domain.jdbc.JdbcChatsDAO;
+import edu.java.domain.jdbc.JdbcLinksDAO;
+import edu.java.domain.jdbc.JdbcSubscribesDAO;
+import edu.java.domain.jpa.JpaChatsDAO;
+import edu.java.domain.jpa.JpaLinksDAO;
+import edu.java.domain.jpa.entities.ChatEntity;
+import edu.java.domain.jpa.entities.LinkEntity;
 import edu.java.services.interfaces.ISubscribeService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-//Этот сервис вообще никак не отличается от того, который был для jdbc, непонятно зачем вообще
-// делать реализации для сервисов, главное кажется ведь для репозиториев?
-public class JooqSubscribeService implements ISubscribeService {
-    JooqChatsDAO chatRepository;
-    JooqLinksDAO linkRepository;
-    JooqSubscribesDAO subscribesRepository;
+@Service
+public class JpaSubscribeService implements ISubscribeService {
+    JpaChatsDAO chatRepository;
+    JpaLinksDAO linkRepository;
     IAPIClient[] clients;
 
-    public JooqSubscribeService(
-        JooqChatsDAO chatRepository,
-        JooqLinksDAO linkRepository,
-        JooqSubscribesDAO subscribesRepository,
+    public JpaSubscribeService(
+        JpaChatsDAO chatRepository,
+        JpaLinksDAO linkRepository,
         IAPIClient[] clients
     ) {
         this.chatRepository = chatRepository;
         this.linkRepository = linkRepository;
-        this.subscribesRepository = subscribesRepository;
         this.clients = clients;
     }
 
+    //А это ок делать проверки в транзакции?
     @Override
+    @Transactional
     public List<LinkResponse> getTrackedURLs(Long chatId) {
         checkChatInSystem(chatId);
-        List<LinkDTO> subscribesOfUser = subscribesRepository.findAllLinksByChatId(chatId);
+        List<LinkEntity> subscribesOfUser = chatRepository.findById(chatId).get().getSubscribes();
         return subscribesOfUser.stream().map(subscribe -> {
             try {
                 return new LinkResponse(subscribe.getId(), new URI(subscribe.getUrl()));
@@ -48,41 +52,49 @@ public class JooqSubscribeService implements ISubscribeService {
         }).toList();
     }
 
+
+    //А это ок делать проверки в транзакции?
     @Override
+    @Transactional
     public Long addTrackedURLs(Long chatId, String providedURL) {
         checkURL(providedURL);
         checkChatInSystem(chatId);
-        if (!linkRepository.contains(providedURL)) {
-            linkRepository.add(providedURL);
+        if (!linkRepository.existsByUrl(providedURL)) {
+            linkRepository.saveByUrl(providedURL);
         }
 
         Long linkId = linkRepository.getId(providedURL);
-        if (subscribesRepository.contains(chatId, linkId)) {
+        ChatEntity chat = chatRepository.findById(chatId).get();
+        LinkEntity link = linkRepository.findById(linkId).get();
+        if (chat.getSubscribes().contains(link)) {
             throw new LinkReAddingException(
                 "У чата со следующим id: " + chatId + " уже есть подпись на сайт: " + providedURL);
         }
-        subscribesRepository.add(chatId, linkId);
+        chat.addSubscribe(link);
         return linkId;
     }
 
+    //А это ок делать проверки в транзакции?
     @Override
+    @Transactional
     public Long removeTrackedURLs(Long chatId, String providedURL) {
         checkURL(providedURL);
         checkChatInSystem(chatId);
-        if (!linkRepository.contains(providedURL)) {
-            linkRepository.add(providedURL);
+        if (!linkRepository.existsByUrl(providedURL)) {
+            linkRepository.saveByUrl(providedURL);
         }
         Long linkId = linkRepository.getId(providedURL);
-        if (!subscribesRepository.contains(chatId, linkId)) {
+        ChatEntity chat = chatRepository.findById(chatId).get();
+        LinkEntity link = linkRepository.findById(linkId).get();
+        if (!chat.getSubscribes().contains(link)) {
             throw new LinkNotFoundException("У чата с id: " + chatId + " нет подписи на сайт: " + providedURL);
-
         }
-        subscribesRepository.remove(chatId, linkId);
+        chat.removeSubscribe(link);
         return linkId;
     }
 
     private void checkChatInSystem(Long chatId) {
-        if (!chatRepository.contains(chatId)) {
+        if (!chatRepository.existsById(chatId)) {
             throw new ChatNotFoundException("Нет чата с id: " + chatId);
         }
     }

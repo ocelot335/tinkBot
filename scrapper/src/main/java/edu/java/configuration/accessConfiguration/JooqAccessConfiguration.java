@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.accessConfiguration;
 
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.IAPIClient;

@@ -1,47 +1,50 @@
-package edu.java.configuration;
+package edu.java.configuration.accessConfiguration;
 
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
+import edu.java.domain.jpa.JpaChatsDAO;
+import edu.java.domain.jpa.JpaLinksDAO;
 import edu.java.services.interfaces.ILinkUpdateService;
 import edu.java.services.interfaces.ISubscribeService;
 import edu.java.services.interfaces.ITgChatService;
 import edu.java.services.jdbc.JdbcLinkUpdateService;
 import edu.java.services.jdbc.JdbcSubscribeService;
 import edu.java.services.jdbc.JdbcTgChatService;
+import edu.java.services.jpa.JpaLinkUpdateService;
+import edu.java.services.jpa.JpaSubscribeService;
+import edu.java.services.jpa.JpaTgChatService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jdbc")
-public class JdbcAccessConfiguration {
+@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jpa")
+public class JpaAccessConfiguration {
     @Bean
     public ILinkUpdateService linkUpdateService(
-        JdbcLinksDAO linkRepository,
+        JpaLinksDAO linkRepository,
         BotClient botClient,
-        IAPIClient[] apiClients,
-        JdbcSubscribesDAO subscribesRepository
+        IAPIClient[] apiClients
     ) {
-        return new JdbcLinkUpdateService(linkRepository, botClient, apiClients, subscribesRepository);
+        return new JpaLinkUpdateService(linkRepository, botClient, apiClients);
     }
 
     @Bean
     public ISubscribeService subscribeService(
-        JdbcChatsDAO chatRepository,
-        JdbcLinksDAO linkRepository,
-        JdbcSubscribesDAO subscribesRepository,
+        JpaChatsDAO chatRepository,
+        JpaLinksDAO linkRepository,
         IAPIClient[] clients
     ) {
-        return new JdbcSubscribeService(chatRepository, linkRepository, subscribesRepository, clients);
+        return new JpaSubscribeService(chatRepository, linkRepository, clients);
     }
 
     @Bean
     public ITgChatService tgChatService(
-        JdbcChatsDAO chatRepository
+        JpaChatsDAO chatRepository
     ) {
-        return new JdbcTgChatService(chatRepository);
+        return new JpaTgChatService(chatRepository);
     }
 }

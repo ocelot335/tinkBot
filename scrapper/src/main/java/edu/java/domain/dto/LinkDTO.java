@@ -1,4 +1,4 @@
-package edu.java.domain.jdbc.dto;
+package edu.java.domain.dto;
 
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;

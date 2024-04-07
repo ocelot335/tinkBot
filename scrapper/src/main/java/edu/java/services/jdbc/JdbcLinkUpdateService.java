@@ -5,8 +5,8 @@ import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -52,14 +52,13 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
         }
     }
 
-    @SneakyThrows
     private boolean check(LinkDTO link) {
         for (IAPIClient client : apiClients) {
             if (client.isCorrectURL(link.getUrl())) {
                 OffsetDateTime lastUpdatedAt;
                 try {
                     lastUpdatedAt = client.getResponse(link).getLastUpdatedAt();
-                } catch (WebClientResponseException e) {
+                } catch (WebClientResponseException | NullPointerException e) {
                     continue;
                     //TODO::handle not existing urls ?? Maybe delete from DataBase?
                 }

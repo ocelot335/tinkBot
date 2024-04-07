@@ -2,7 +2,7 @@ package edu.java.clients.apiclients;
 
 import edu.java.clients.responses.IAPIResponse;
 import edu.java.clients.responses.StackOverflowResponse;
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;

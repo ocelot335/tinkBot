@@ -1,7 +1,7 @@
 package edu.java.domain.jdbc;
 
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -20,9 +20,6 @@ public class JdbcSubscribesDAO {
 
     @Transactional
     public void add(Long chatId, Long urlId) {
-        //На каком этапе надо добавлять ссылку в таблицу ссылок, когда она добавляется в первый раз?
-        //Сейчас это будет делаться у меня в сервисе
-
         String query = "INSERT INTO subscribes(chatId,linkId) VALUES(?,?);";
         jdbcClient.sql(query).param(chatId).param(urlId).update();
     }
@@ -33,7 +30,7 @@ public class JdbcSubscribesDAO {
         jdbcClient.sql(query).param(chatId).param(urlId).update();
     }
 
-    //Нужна ли поддержка сериализации?, нужен ли Serializable?
+    @Transactional(readOnly = true)
     public List<SubscribeDTO> findAllSubscribes() {
         String query = "SELECT * FROM subscribes;";
         return jdbcClient.sql(query).query((rs, rowNum) ->
@@ -41,12 +38,7 @@ public class JdbcSubscribesDAO {
                 .linkId(rs.getLong(linkIdColumnName)).build()).list();
     }
 
-    //Это ок, делать такой метод? Просто кажется,
-    // лучше что пусть лучше бд будет обрабатывать это,
-    // чем если сервер будет сначала принимать
-    // все записи, а потом фильтровать их джойнить.
-    //
-    // У нас ведь это нужно только по запросу пользователя.
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAllLinksByChatId(Long chatId) {
         String query = "SELECT * FROM links WHERE links.id IN "
             + "(SELECT subscribes.linkId FROM subscribes WHERE chatId=?);";
@@ -58,6 +50,7 @@ public class JdbcSubscribesDAO {
     }
 
     //Это ок, делать такой метод?
+    @Transactional(readOnly = true)
     public boolean contains(Long chatId, Long urlId) {
         String query = "SELECT COUNT(*) FROM subscribes WHERE chatId=? AND linkId=?";
         int count = jdbcClient.sql(query)

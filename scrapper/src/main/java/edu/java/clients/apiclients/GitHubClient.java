@@ -3,7 +3,7 @@ package edu.java.clients.apiclients;
 import edu.java.clients.responses.IAPIResponse;
 import edu.java.clients.responses.github.GitHubEventsResponse;
 import edu.java.clients.responses.github.GitHubRepositoryResponse;
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,11 +22,12 @@ public class GitHubClient implements IAPIClient {
         this.webClient = webClient;
     }
 
-    public GitHubRepositoryResponse fetchRepository(String owner, String repo) {
+    public GitHubEventsResponse.Event fetchRepository(String owner, String repo) {
         return webClient.get()
-            .uri("/repos/{owner}/{repo}", owner, repo)
+            .uri("/repos/{owner}/{repo}/events", owner, repo)
             .retrieve()
-            .bodyToMono(GitHubRepositoryResponse.class).block();
+            .bodyToMono(new ParameterizedTypeReference<List<GitHubEventsResponse.Event>>() {
+            }).block().getFirst();
     }
 
     @Override
@@ -50,12 +51,12 @@ public class GitHubClient implements IAPIClient {
     private String getDescriptionFromEvents(List<GitHubEventsResponse.Event> events, OffsetDateTime toDate) {
         StringBuilder sb = new StringBuilder();
         for (GitHubEventsResponse.Event event : events) {
+            if (event.getCreatedAt().isBefore(toDate) || event.getCreatedAt().equals(toDate)) {
+                break;
+            }
             sb.append("--");
             sb.append(event.toString());
             sb.append("\n");
-            if (event.getCreatedAt().isBefore(toDate)) {
-                break;
-            }
         }
         return sb.toString();
 

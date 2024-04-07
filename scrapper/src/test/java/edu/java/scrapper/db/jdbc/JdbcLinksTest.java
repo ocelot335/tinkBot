@@ -1,7 +1,7 @@
 package edu.java.scrapper.db.jdbc;
 
 import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

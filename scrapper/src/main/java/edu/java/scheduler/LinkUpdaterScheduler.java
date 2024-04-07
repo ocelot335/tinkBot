@@ -20,8 +20,6 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
-        //Если я вообще всё правильно понял, то шедулер каждые inteval будет проверять ссылки и
-        // те которые старше forceCheckDelay он проверяет через клиент. Надеюсь правильно понял задание
         linkUpdateService.update(scheduler.forceCheckDelay());
     }
 }

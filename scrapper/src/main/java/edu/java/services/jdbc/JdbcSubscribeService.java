@@ -9,7 +9,7 @@ import edu.java.controller.exception.LinkReAddingException;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import edu.java.services.interfaces.ISubscribeService;
 import java.net.URI;
 import java.net.URISyntaxException;

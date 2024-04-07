@@ -2,6 +2,7 @@ package edu.java.scrapper.clients;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.clients.apiclients.GitHubClient;
+import edu.java.clients.responses.github.GitHubEventsResponse;
 import edu.java.clients.responses.github.GitHubRepositoryResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -44,10 +45,8 @@ public class GitHubClientTest {
             ));
 
         GitHubClient gitHubClient = new GitHubClient(webClient);
-        GitHubRepositoryResponse response = gitHubClient.fetchRepository("owner", "repo");
+        GitHubEventsResponse.Event response = gitHubClient.fetchRepository("owner", "repo");
 
-        Assertions.assertEquals("Test Repo", response.getName());
-        Assertions.assertEquals("Test Description", response.getDescription());
-        Assertions.assertEquals("2077-11-23T00:00Z", response.getPushedAt().toString());
+        Assertions.assertEquals("2077-11-23T00:00Z", response.getLastUpdatedAt().toString());
     }
 }

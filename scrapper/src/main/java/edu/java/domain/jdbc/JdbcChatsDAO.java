@@ -1,6 +1,6 @@
 package edu.java.domain.jdbc;
 
-import edu.java.domain.jdbc.dto.ChatDTO;
+import edu.java.domain.dto.ChatDTO;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -29,7 +29,6 @@ public class JdbcChatsDAO {
         jdbcClient.sql(query).param(telegramId).update();
     }
 
-    //Нужна ли поддержка сериализации?, нужен ли Serializable?
     public List<ChatDTO> findAll() {
         String query = "SELECT * FROM chats;";
         return jdbcClient.sql(query).query((rs, rowNum) ->

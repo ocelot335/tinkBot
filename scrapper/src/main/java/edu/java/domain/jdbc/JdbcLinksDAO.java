@@ -1,6 +1,6 @@
 package edu.java.domain.jdbc;
 
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -33,9 +33,9 @@ public class JdbcLinksDAO {
         jdbcClient.sql(query).param(url).update();
     }
 
-    //Нужна ли поддержка сериализации?, нужен ли Serializable?
     //Мне также вообще не нравится, что здесь я указываю явные имена стобцов, может их как-то можно инъектить?
     //Как я понимаю JdbcClient это не поддерживает?
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAll() {
         String query = "SELECT * FROM links;";
         return jdbcClient.sql(query).query((rs, rowNum) ->
@@ -45,6 +45,7 @@ public class JdbcLinksDAO {
             )).list();
     }
 
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAllFilteredToCheck(Duration forceCheckDelay) {
         String interval = "'" + forceCheckDelay.getSeconds() + " seconds'";
         String query = "SELECT * FROM links WHERE checked_at + interval " + interval + " <= NOW();";
@@ -56,6 +57,7 @@ public class JdbcLinksDAO {
     }
 
     //Это ок, делать такой метод?
+    @Transactional(readOnly = true)
     public Long getId(String url) {
         String queryGetUrlId = "SELECT id FROM links WHERE url=?";
         return jdbcClient.sql(queryGetUrlId).param(url).query((rs, rowNum) ->
@@ -63,6 +65,7 @@ public class JdbcLinksDAO {
     }
 
     //Это ок, делать такой метод?
+    @Transactional(readOnly = true)
     public boolean contains(String url) {
         String query = "SELECT COUNT(*) FROM links WHERE url = ?";
         int count = jdbcClient.sql(query)

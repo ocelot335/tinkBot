@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Deprecated
 public class GitHubRepositoryResponse implements IAPIResponse {
     private String name;
     private String description;
