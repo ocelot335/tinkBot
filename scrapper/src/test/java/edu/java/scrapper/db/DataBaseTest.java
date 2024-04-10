@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Deprecated
 public class DataBaseTest extends IntegrationTest {
     @Test
     public void simpleTest() throws SQLException {

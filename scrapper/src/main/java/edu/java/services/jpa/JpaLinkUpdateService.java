@@ -45,11 +45,13 @@ public class JpaLinkUpdateService implements ILinkUpdateService {
         List<LinkEntity> linksToCheck =
             linkRepository.findAllFilteredToCheck(OffsetDateTime.now().minus(forceCheckDelay));
         for (LinkEntity link : linksToCheck) {
+            OffsetDateTime lastUpdatedTimeBeforeCheck = link.getLastUpdatedAt();
             if (check(link)) {
-                notifyUsers(link, getUsersToNotify(link), getDescription(link));
+                notifyUsers(link, getUsersToNotify(link), getDescription(link, lastUpdatedTimeBeforeCheck));
             }
-            linkRepository.updateCheckedAtById(link.getId(), now);
+            link.setCheckedAt(now);
         }
+        linkRepository.saveAll(linksToCheck);
     }
 
     @Transactional
@@ -68,7 +70,7 @@ public class JpaLinkUpdateService implements ILinkUpdateService {
                     //TODO::handle not existing urls ?? Maybe delete from DataBase?
                 }
                 if (link.getLastUpdatedAt().isBefore(lastUpdatedAt)) {
-                    linkRepository.updateLastUpdatedAtById(link.getId(), lastUpdatedAt);
+                    link.setLastUpdatedAt(lastUpdatedAt);
                     return true;
                 }
                 break;
@@ -77,11 +79,14 @@ public class JpaLinkUpdateService implements ILinkUpdateService {
         return false;
     }
 
-    private String getDescription(LinkEntity link) {
+    private String getDescription(LinkEntity link, OffsetDateTime lastUpdatedTimeBeforeLastUpdate) {
         for (IAPIClient client : apiClients) {
             if (client.isCorrectURL(link.getUrl())) {
                 if (client instanceof GitHubClient) {
-                    return ((GitHubClient) client).getDescription(new LinkDTO(link.getUrl()), link.getLastUpdatedAt());
+                    return ((GitHubClient) client).getDescription(
+                        new LinkDTO(link.getUrl()),
+                        lastUpdatedTimeBeforeLastUpdate
+                    );
                 } else {
                     break;
                 }

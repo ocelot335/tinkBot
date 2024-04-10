@@ -13,22 +13,19 @@ import java.util.List;
 @Repository
 public interface JpaLinksDAO extends JpaRepository<LinkEntity, Long> {
     boolean existsByUrl(String url);
+
     @Modifying
     @Transactional
     @Query("INSERT INTO LinkEntity(url) VALUES(?1)")
     void saveByUrl(String url);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM LinkEntity WHERE url=?1")
+    void removeByUrl(String url);
+
     @Query("SELECT id FROM LinkEntity WHERE url=?1")
     Long getId(String url);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE LinkEntity SET checkedAt = ?2 WHERE id = ?1")
-    void updateCheckedAtById(Long Id, OffsetDateTime actualCheckedAt);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE LinkEntity SET lastUpdatedAt = ?2 WHERE id = ?1")
-    void updateLastUpdatedAtById(Long Id, OffsetDateTime actualCheckedAt);
 
     @Query("FROM LinkEntity WHERE checkedAt <= ?1")
     List<LinkEntity> findAllFilteredToCheck(OffsetDateTime checkBoundary);

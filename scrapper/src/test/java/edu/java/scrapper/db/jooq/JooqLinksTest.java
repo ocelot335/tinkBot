@@ -1,22 +1,23 @@
-package edu.java.scrapper.db.jdbc;
+package edu.java.scrapper.db.jooq;
 
-import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.jdbc.JdbcLinksDAO;
+import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.scrapper.IntegrationTest;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @SpringBootTest
-public class JdbcLinksTest extends IntegrationTest {
+public class JooqLinksTest extends IntegrationTest {
     @Autowired
-    private JdbcLinksDAO linkRepository;
+    private JooqLinksDAO linkRepository;
 
     @Test
     @Transactional

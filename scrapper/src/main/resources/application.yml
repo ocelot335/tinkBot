@@ -1,8 +1,8 @@
 app:
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 20s
+    interval: 20s
+    force-check-delay: 40s
   basic-urls:
     git-hub-basic-url: ${GITHUB_BASE_URL:https://api.github.com}
     stack-overflow-basic-url: ${STACKOVERFLOW_BASE_URL:https://api.stackexchange.com/2.3/}
