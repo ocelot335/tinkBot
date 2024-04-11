@@ -2,6 +2,14 @@ app:
   telegram-token: ${telegramToken}
   basic-urls:
     scrapper-basic-url: http://localhost:8080
+  retry-clients:
+    scrapper-retry:
+      retry-mode: linear
+      retry-codes:
+        - 400
+        - 404
+      duration: 500ms
+      max-attempts: 3
 
 spring:
   application:

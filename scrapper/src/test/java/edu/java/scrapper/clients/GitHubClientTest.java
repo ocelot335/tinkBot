@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.responses.github.GitHubEventsResponse;
 import edu.java.clients.responses.github.GitHubRepositoryResponse;
+import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,7 +45,7 @@ public class GitHubClientTest {
                     "{\"name\": \"Test Repo\", \"description\": \"Test Description\", \"pushed_at\": \"2077-11-23T00:00:00Z\"}")
             ));
 
-        GitHubClient gitHubClient = new GitHubClient(webClient);
+        GitHubClient gitHubClient = new GitHubClient(webClient, Retry.ofDefaults("test"));
         GitHubEventsResponse.Event response = gitHubClient.fetchRepository("owner", "repo");
 
         Assertions.assertEquals("2077-11-23T00:00Z", response.getLastUpdatedAt().toString());

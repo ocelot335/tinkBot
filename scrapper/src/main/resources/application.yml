@@ -8,6 +8,28 @@ app:
     stack-overflow-basic-url: ${STACKOVERFLOW_BASE_URL:https://api.stackexchange.com/2.3/}
     bot-basic-url: ${BOT_BASE_URL:http://localhost:8090}
   database-access-type: jpa
+  retry-clients:
+    bot-retry:
+      retry-mode: linear
+      retry-codes:
+        - 400
+        - 404
+      duration: 500ms
+      max-attempts: 3
+    git-hub-retry:
+      retry-mode: linear
+      retry-codes:
+        - 400
+        - 404
+      duration: 500ms
+      max-attempts: 3
+    stack-overflow-retry:
+      retry-mode: linear
+      retry-codes:
+        - 400
+        - 404
+      duration: 500ms
+      max-attempts: 3
 
 spring:
   application:

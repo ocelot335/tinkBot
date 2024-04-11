@@ -8,26 +8,44 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import io.github.resilience4j.retry.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
 
+@Slf4j
 public class GitHubClient implements IAPIClient {
 
     private final WebClient webClient;
+    private final Retry retry;
     private static final String GIT_HUB_REG_EXP = "^https?://github\\.com/([^/]+)/([^/]+)";
 
     @Autowired
-    public GitHubClient(WebClient webClient) {
+    public GitHubClient(WebClient webClient, Retry retry) {
         this.webClient = webClient;
+        this.retry = retry;
     }
 
     public GitHubEventsResponse.Event fetchRepository(String owner, String repo) {
-        return webClient.get()
-            .uri("/repos/{owner}/{repo}/events", owner, repo)
-            .retrieve()
-            .bodyToMono(new ParameterizedTypeReference<List<GitHubEventsResponse.Event>>() {
-            }).block().getFirst();
+        try {
+            Mono<List<GitHubEventsResponse.Event>> request = webClient.get()
+                .uri("/repos/{owner}/{repo}/events", owner, repo)
+                .retrieve()
+                .onStatus(
+                    HttpStatusCode::isError,
+                    clientResponse -> Mono.error(new APIException(clientResponse.statusCode()))
+                )
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+            return retry.executeSupplier(request::block).getFirst();
+        } catch (WebClientRequestException | APIException e) {
+            log.error(e.toString());
+            return null;
+        }
     }
 
     @Override
@@ -40,12 +58,23 @@ public class GitHubClient implements IAPIClient {
     public String getDescription(LinkDTO link, OffsetDateTime toDate) {
         String owner = getOwner(link);
         String repo = getRepo(link);
-        List<GitHubEventsResponse.Event> events = webClient.get()
-            .uri("/repos/{owner}/{repo}/events", owner, repo)
-            .retrieve()
-            .bodyToMono(new ParameterizedTypeReference<List<GitHubEventsResponse.Event>>() {
-            }).block();
-        return getDescriptionFromEvents(events, toDate);
+        try {
+            Mono<List<GitHubEventsResponse.Event>> request =
+                webClient.get()
+                    .uri("/repos/{owner}/{repo}/events", owner, repo)
+                    .retrieve()
+                    .onStatus(
+                        HttpStatusCode::isError,
+                        clientResponse -> Mono.error(new APIException(clientResponse.statusCode()))
+                    )
+                    .bodyToMono(new ParameterizedTypeReference<>() {
+                    });
+            List<GitHubEventsResponse.Event> events = retry.executeSupplier(request::block);
+            return getDescriptionFromEvents(events, toDate);
+        } catch (WebClientRequestException | APIException e) {
+            log.error(e.toString());
+            return "Описание недоступно(";
+        }
     }
 
     private String getDescriptionFromEvents(List<GitHubEventsResponse.Event> events, OffsetDateTime toDate) {

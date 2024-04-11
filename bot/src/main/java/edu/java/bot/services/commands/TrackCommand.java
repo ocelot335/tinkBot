@@ -45,7 +45,10 @@ public class TrackCommand implements ICommand {
 
     private String addURL(Update update) {
         usersWaiting.setWaiting(update.message().chat().id(), usersWaiting.getDefaultWaiting());
-        scrapperClient.postLink(update.message().chat().id(), update.message().text());
-        return URL_ADDED;
+        if (scrapperClient.postLink(update.message().chat().id(), update.message().text()) != null) {
+            return URL_ADDED;
+        } else {
+            return SCRAPPER_ERROR;
+        }
     }
 }

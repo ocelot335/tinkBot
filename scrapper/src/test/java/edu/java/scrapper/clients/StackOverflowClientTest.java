@@ -3,6 +3,7 @@ package edu.java.scrapper.clients;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.clients.apiclients.StackOverflowClient;
 import edu.java.clients.responses.StackOverflowResponse;
+import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +44,7 @@ public class StackOverflowClientTest {
                     "{\"items\": [{\"title\": \"Test Question\", \"last_edit_date\": \"2004-11-23T00:00:00Z\", \"body\": \"Test Body\", \"last_activity_date\": \"2003-11-23T00:00:00Z\"}]}")
             ));
 
-        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
+        StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient, Retry.ofDefaults("test"));
 
         StackOverflowResponse response = stackOverflowClient.fetchQuestion("42");
         Assertions.assertEquals("Test Question", response.getItems().get(0).getTitle());
