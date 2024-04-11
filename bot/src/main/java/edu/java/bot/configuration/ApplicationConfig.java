@@ -15,7 +15,9 @@ public record ApplicationConfig(
     String telegramToken,
     @NotNull BasicURLs basicURLs,
     @NotNull RetryClients retryClients,
-    @NotNull @Bean RateLimits rateLimits
+    @NotNull @Bean RateLimits rateLimits,
+
+    @NotNull KafkaTopics kafkaTopics
 ) {
     public record BasicURLs(String scrapperBasicURL) {
     }
@@ -31,5 +33,11 @@ public record ApplicationConfig(
     }
 
     public record RateLimits(Long capacity, Long tokens, Duration period) {
+    }
+
+    public record KafkaTopics(KafkaTopic messageTopic) {
+    }
+
+    public record KafkaTopic(String name, Integer partitions, Integer replicas) {
     }
 }
