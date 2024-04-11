@@ -3,7 +3,6 @@ package edu.java.scrapper.clients;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.responses.github.GitHubEventsResponse;
-import edu.java.clients.responses.github.GitHubRepositoryResponse;
 import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

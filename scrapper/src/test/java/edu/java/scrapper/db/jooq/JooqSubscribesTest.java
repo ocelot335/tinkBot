@@ -2,21 +2,18 @@ package edu.java.scrapper.db.jooq;
 
 import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.dto.SubscribeDTO;
-import edu.java.domain.jdbc.JdbcChatsDAO;
-import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.jooq.JooqChatsDAO;
 import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.domain.jooq.JooqSubscribesDAO;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 public class JooqSubscribesTest extends IntegrationTest {

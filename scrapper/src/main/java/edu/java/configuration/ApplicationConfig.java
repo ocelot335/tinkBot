@@ -12,12 +12,11 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 @EnableScheduling
 public record ApplicationConfig(
-    @NotNull
-    @Bean
-    Scheduler scheduler,
+    @NotNull @Bean Scheduler scheduler,
     @NotNull BasicURLs basicURLs,
     @NotNull AccessType databaseAccessType,
-    @NotNull RetryClients retryClients
+    @NotNull RetryClients retryClients,
+    @NotNull @Bean RateLimits rateLimits
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -38,5 +37,8 @@ public record ApplicationConfig(
 
     public enum RetryMode {
         CONSTANT, LINEAR, EXPONENTIAL
+    }
+
+    public record RateLimits(Long capacity, Long tokens, Duration period) {
     }
 }

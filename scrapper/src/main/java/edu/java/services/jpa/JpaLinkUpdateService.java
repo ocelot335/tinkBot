@@ -6,16 +6,15 @@ import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.jpa.JpaLinksDAO;
-import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.domain.jpa.entities.LinkEntity;
 import edu.java.services.interfaces.ILinkUpdateService;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.List;
 
 @Service
 @Slf4j

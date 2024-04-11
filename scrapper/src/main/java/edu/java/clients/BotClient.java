@@ -2,20 +2,17 @@ package edu.java.clients;
 
 import edu.java.clients.dto.ApiErrorResponse;
 import edu.java.clients.dto.LinkUpdate;
-import java.time.Duration;
-import java.util.List;
 import io.github.resilience4j.retry.Retry;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.retry.annotation.RetryConfiguration;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
-import reactor.util.retry.RetrySpec;
 
 @Slf4j
 public class BotClient {

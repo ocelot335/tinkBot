@@ -5,12 +5,8 @@ import edu.java.bot.clients.dto.ApiErrorResponse;
 import edu.java.bot.clients.dto.LinkResponse;
 import edu.java.bot.clients.dto.ListLinkResponse;
 import edu.java.bot.clients.dto.RemoveLinkRequest;
-import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
-import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,8 +15,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
-import java.time.Duration;
-import java.util.function.Function;
 
 @Slf4j
 public class ScrapperClient {

@@ -1,7 +1,7 @@
 package edu.java.scrapper.db.jdbc;
 
-import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.scrapper.IntegrationTest;
 import java.time.Duration;
 import java.time.OffsetDateTime;

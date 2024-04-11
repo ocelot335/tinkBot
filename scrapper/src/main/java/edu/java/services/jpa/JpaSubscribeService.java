@@ -6,20 +6,16 @@ import edu.java.controller.exception.CantHandleURLException;
 import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.LinkNotFoundException;
 import edu.java.controller.exception.LinkReAddingException;
-import edu.java.domain.dto.LinkDTO;
-import edu.java.domain.jdbc.JdbcChatsDAO;
-import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.jpa.JpaChatsDAO;
 import edu.java.domain.jpa.JpaLinksDAO;
 import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.domain.jpa.entities.LinkEntity;
 import edu.java.services.interfaces.ISubscribeService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class JpaSubscribeService implements ISubscribeService {
@@ -51,7 +47,6 @@ public class JpaSubscribeService implements ISubscribeService {
             }
         }).toList();
     }
-
 
     //А это ок делать проверки в транзакции?
     @Override

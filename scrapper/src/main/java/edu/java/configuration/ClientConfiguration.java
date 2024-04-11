@@ -5,17 +5,15 @@ import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.APIException;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.StackOverflowClient;
-import edu.java.clients.responses.github.GitHubEventsResponse;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
-import reactor.core.publisher.Mono;
-import java.time.Duration;
 
 @Configuration
 public class ClientConfiguration {

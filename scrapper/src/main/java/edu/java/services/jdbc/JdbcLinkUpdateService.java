@@ -3,16 +3,15 @@ package edu.java.services.jdbc;
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
-import edu.java.domain.jdbc.JdbcLinksDAO;
-import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.dto.SubscribeDTO;
+import edu.java.domain.jdbc.JdbcLinksDAO;
+import edu.java.domain.jdbc.JdbcSubscribesDAO;
 import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
-import lombok.SneakyThrows;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class JdbcLinkUpdateService implements ILinkUpdateService {

@@ -2,18 +2,18 @@ package edu.java.clients.responses.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.java.clients.responses.IAPIResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
-import edu.java.clients.responses.IAPIResponse;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubEventsResponse  {
+public class GitHubEventsResponse {
     private List<Event> events;
 
     @Data
-    public static class Event implements IAPIResponse{
+    public static class Event implements IAPIResponse {
         private String type;
         @JsonProperty("created_at")
         private OffsetDateTime createdAt;

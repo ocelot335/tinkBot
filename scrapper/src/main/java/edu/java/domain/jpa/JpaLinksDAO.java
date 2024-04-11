@@ -1,14 +1,13 @@
 package edu.java.domain.jpa;
 
-import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.domain.jpa.entities.LinkEntity;
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.OffsetDateTime;
-import java.util.List;
 
 @Repository
 public interface JpaLinksDAO extends JpaRepository<LinkEntity, Long> {

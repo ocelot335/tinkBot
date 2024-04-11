@@ -2,12 +2,11 @@ package edu.java.bot.configuration;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
@@ -15,7 +14,8 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     @NotNull BasicURLs basicURLs,
-    @NotNull RetryClients retryClients
+    @NotNull RetryClients retryClients,
+    @NotNull @Bean RateLimits rateLimits
 ) {
     public record BasicURLs(String scrapperBasicURL) {
     }
@@ -28,5 +28,8 @@ public record ApplicationConfig(
 
     public enum RetryMode {
         CONSTANT, LINEAR, EXPONENTIAL
+    }
+
+    public record RateLimits(Long capacity, Long tokens, Duration period) {
     }
 }

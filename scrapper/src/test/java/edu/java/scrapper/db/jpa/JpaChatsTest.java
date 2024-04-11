@@ -1,17 +1,15 @@
 package edu.java.scrapper.db.jpa;
 
-import edu.java.domain.dto.ChatDTO;
 import edu.java.domain.jpa.JpaChatsDAO;
 import edu.java.domain.jpa.entities.ChatEntity;
-import edu.java.domain.jpa.entities.LinkEntity;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @SpringBootTest
 public class JpaChatsTest extends IntegrationTest {

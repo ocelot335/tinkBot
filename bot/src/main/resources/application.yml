@@ -10,6 +10,10 @@ app:
         - 404
       duration: 500ms
       max-attempts: 3
+  rate-limits:
+    capacity: 10
+    tokens: 5
+    period: 30s
 
 spring:
   application:

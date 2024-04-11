@@ -1,19 +1,17 @@
 package edu.java.scrapper.db.jpa;
 
-import edu.java.domain.dto.LinkDTO;
-import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jpa.JpaLinksDAO;
 import edu.java.domain.jpa.entities.LinkEntity;
 import edu.java.scrapper.IntegrationTest;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.List;
 
 @SpringBootTest
 public class JpaLinksTest extends IntegrationTest {
@@ -98,7 +96,8 @@ public class JpaLinksTest extends IntegrationTest {
         linkRepository.save(kotlinLink);
 
         Duration forceCheckDelay = Duration.ofMinutes(4);
-        List<LinkEntity> linksToCheck = linkRepository.findAllFilteredToCheck(OffsetDateTime.now().minus(forceCheckDelay));
+        List<LinkEntity> linksToCheck =
+            linkRepository.findAllFilteredToCheck(OffsetDateTime.now().minus(forceCheckDelay));
 
         Assertions.assertEquals(2, linksToCheck.size());
         List<String> urls = linksToCheck.stream().map(LinkEntity::getUrl).toList();
