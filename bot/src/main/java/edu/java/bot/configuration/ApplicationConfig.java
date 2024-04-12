@@ -18,6 +18,7 @@ public record ApplicationConfig(
     @NotNull @Bean RateLimits rateLimits,
 
     @NotNull @Bean ApplicationConfig.KafkaConsumerConfig kafkaConsumerConfig,
+    @NotNull @Bean ApplicationConfig.KafkaProducerConfig kafkaProducerConfig,
 
     @NotNull @Bean KafkaTopics kafkaTopics
 ) {
@@ -37,10 +38,18 @@ public record ApplicationConfig(
     public record RateLimits(Long capacity, Long tokens, Duration period) {
     }
 
-    public record KafkaConsumerConfig(String bootstrapServer, String groupId, String autoOffsetReset, Integer maxPollIntervalMs,
+    public record KafkaConsumerConfig(String bootstrapServer, String groupId, String autoOffsetReset,
+                                      Integer maxPollIntervalMs,
                                       Boolean enableAutoCommit, Integer concurrency) {
     }
 
-    public record KafkaTopics(KafkaTopic messageTopic) {}
-    public record KafkaTopic(String name, Integer partitions, Integer replicas) {}
+    public record KafkaProducerConfig(String bootstrapServer, String clientId, String acksMode,
+                                      Duration deliveryTimeout, Long lingerMs, Integer batchSize) {
+    }
+
+    public record KafkaTopics(KafkaTopic messagesTopic, KafkaTopic messagesDlqTopic) {
+    }
+
+    public record KafkaTopic(String name, Integer partitions, Integer replicas) {
+    }
 }

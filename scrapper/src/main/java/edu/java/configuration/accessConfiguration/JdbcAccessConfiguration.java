@@ -1,6 +1,5 @@
 package edu.java.configuration.accessConfiguration;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;

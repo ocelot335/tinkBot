@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -20,7 +19,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 public class KafkaConsumerConfiguration {
     @Bean
-    public ConsumerFactory<Long, LinkUpdate> taskInfoConsumerFactory(ApplicationConfig.KafkaConsumerConfig kafkaConfig) {
+    public ConsumerFactory<Long, LinkUpdate>
+    taskInfoConsumerFactory(ApplicationConfig.KafkaConsumerConfig kafkaConfig) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServer());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConfig.groupId());
@@ -52,9 +52,9 @@ public class KafkaConsumerConfiguration {
     //Где вообще правильно создавать топики? Здесь? И здесь и у продюсера? В compose файле? В сторонних сервисах?
     @Bean
     public NewTopic topic1(ApplicationConfig.KafkaTopics kafkaTopics) {
-        return TopicBuilder.name(kafkaTopics.messageTopic().name())
-            .partitions(kafkaTopics.messageTopic().partitions())
-            .replicas(kafkaTopics.messageTopic().replicas())
+        return TopicBuilder.name(kafkaTopics.messagesTopic().name())
+            .partitions(kafkaTopics.messagesTopic().partitions())
+            .replicas(kafkaTopics.messagesTopic().replicas())
             .build();
     }
 }

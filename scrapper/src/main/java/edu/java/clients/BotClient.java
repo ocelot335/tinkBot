@@ -2,11 +2,9 @@ package edu.java.clients;
 
 import edu.java.clients.dto.ApiErrorResponse;
 import edu.java.clients.dto.LinkUpdate;
-import edu.java.services.IMessageTransporter;
 import io.github.resilience4j.retry.Retry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @AllArgsConstructor
-public class BotClient{
+public class BotClient {
     private final WebClient webClient;
     private final Retry retry;
 

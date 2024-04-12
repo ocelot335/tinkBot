@@ -1,6 +1,5 @@
 package edu.java.services.jooq;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.clients.dto.LinkUpdate;

@@ -1,6 +1,6 @@
-package edu.java.configuration;
+package edu.java.bot.configuration;
 
-import edu.java.clients.dto.LinkUpdate;
+import edu.java.bot.controller.dto.LinkUpdate;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
