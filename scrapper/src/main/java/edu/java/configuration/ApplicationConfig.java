@@ -12,11 +12,15 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 @EnableScheduling
 public record ApplicationConfig(
+    @NotNull MessageTransporterType messageTransporterType,
+
+    @NotNull AccessType databaseAccessType,
     @NotNull @Bean Scheduler scheduler,
     @NotNull BasicURLs basicURLs,
-    @NotNull AccessType databaseAccessType,
     @NotNull RetryClients retryClients,
-    @NotNull @Bean RateLimits rateLimits
+    @NotNull @Bean RateLimits rateLimits,
+    @NotNull @Bean KafkaProducerConfig kafkaProducerConfig,
+    @NotNull @Bean KafkaTopics kafkaTopics
 ) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
@@ -40,5 +44,19 @@ public record ApplicationConfig(
     }
 
     public record RateLimits(Long capacity, Long tokens, Duration period) {
+    }
+
+    public record KafkaProducerConfig(String bootstrapServer, String clientId, String acksMode,
+                                      Duration deliveryTimeout, Long lingerMs, Integer batchSize) {
+    }
+
+    public record KafkaTopics(KafkaTopic messageTopic) {
+    }
+
+    public record KafkaTopic(String name, Integer partitions, Integer replicas) {
+    }
+
+    public enum MessageTransporterType {
+        HTTP, KAFKA
     }
 }

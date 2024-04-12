@@ -1,12 +1,13 @@
 package edu.java.services.jdbc;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
+import edu.java.clients.dto.LinkUpdate;
 import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.dto.SubscribeDTO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -17,17 +18,17 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class JdbcLinkUpdateService implements ILinkUpdateService {
     private JdbcLinksDAO linkRepository;
     private JdbcSubscribesDAO subscribesRepository;
-    private BotClient botClient;
+    private IMessageTransporter messageTransporter;
     private IAPIClient[] apiClients;
 
     public JdbcLinkUpdateService(
         JdbcLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients,
         JdbcSubscribesDAO subscribesRepository
     ) {
         this.linkRepository = linkRepository;
-        this.botClient = botClient;
+        this.messageTransporter = messageTransporter;
         this.apiClients = apiClients;
         this.subscribesRepository = subscribesRepository;
     }
@@ -90,6 +91,6 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
         List<Long> usersToNotify =
             subscribes.stream().filter(subscribeDTO -> Objects.equals(subscribeDTO.getLinkId(), link.getId()))
                 .map(SubscribeDTO::getChatId).toList();
-        botClient.postUpdates(link.getId(), link.getUrl(), description, usersToNotify);
+        messageTransporter.send(new LinkUpdate(link.getId(), link.getUrl(), description, usersToNotify));
     }
 }

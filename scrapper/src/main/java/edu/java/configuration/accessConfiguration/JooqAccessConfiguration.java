@@ -5,6 +5,7 @@ import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jooq.JooqChatsDAO;
 import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.domain.jooq.JooqSubscribesDAO;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import edu.java.services.interfaces.ISubscribeService;
 import edu.java.services.interfaces.ITgChatService;
@@ -21,11 +22,11 @@ public class JooqAccessConfiguration {
     @Bean
     public ILinkUpdateService linkUpdateService(
         JooqLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients,
         JooqSubscribesDAO subscribesRepository
     ) {
-        return new JooqLinkUpdateService(linkRepository, botClient, apiClients, subscribesRepository);
+        return new JooqLinkUpdateService(linkRepository, messageTransporter, apiClients, subscribesRepository);
     }
 
     @Bean

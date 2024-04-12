@@ -4,6 +4,7 @@ import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jpa.JpaChatsDAO;
 import edu.java.domain.jpa.JpaLinksDAO;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import edu.java.services.interfaces.ISubscribeService;
 import edu.java.services.interfaces.ITgChatService;
@@ -20,10 +21,10 @@ public class JpaAccessConfiguration {
     @Bean
     public ILinkUpdateService linkUpdateService(
         JpaLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients
     ) {
-        return new JpaLinkUpdateService(linkRepository, botClient, apiClients);
+        return new JpaLinkUpdateService(linkRepository, messageTransporter, apiClients);
     }
 
     @Bean

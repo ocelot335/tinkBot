@@ -1,4 +1,6 @@
 app:
+  message-transporter-type: kafka
+  database-access-type: jpa
   scheduler:
     enable: true
     interval: 20s
@@ -7,7 +9,6 @@ app:
     git-hub-basic-url: ${GITHUB_BASE_URL:https://api.github.com}
     stack-overflow-basic-url: ${STACKOVERFLOW_BASE_URL:https://api.stackexchange.com/2.3/}
     bot-basic-url: ${BOT_BASE_URL:http://localhost:8090}
-  database-access-type: jpa
   retry-clients:
     bot-retry:
       retry-mode: linear
@@ -34,6 +35,16 @@ app:
     capacity: 10
     tokens: 5
     period: 30s
+  kafka-producer-config:
+    bootstrap-server: localhost:9092
+    client-id: scrapper
+    acks-mode: 1
+    delivery-timeout: 60s
+    linger-ms: 12_000
+    batch-size: 100_000
+  kafka-topics:
+    message-topic:
+      name: messages
 
 spring:
   application:

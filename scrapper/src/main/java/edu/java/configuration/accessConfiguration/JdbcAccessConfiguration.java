@@ -5,6 +5,7 @@ import edu.java.clients.apiclients.IAPIClient;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import edu.java.services.interfaces.ISubscribeService;
 import edu.java.services.interfaces.ITgChatService;
@@ -21,11 +22,11 @@ public class JdbcAccessConfiguration {
     @Bean
     public ILinkUpdateService linkUpdateService(
         JdbcLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients,
         JdbcSubscribesDAO subscribesRepository
     ) {
-        return new JdbcLinkUpdateService(linkRepository, botClient, apiClients, subscribesRepository);
+        return new JdbcLinkUpdateService(linkRepository, messageTransporter, apiClients, subscribesRepository);
     }
 
     @Bean

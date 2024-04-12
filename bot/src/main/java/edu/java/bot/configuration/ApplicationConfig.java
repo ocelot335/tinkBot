@@ -17,7 +17,9 @@ public record ApplicationConfig(
     @NotNull RetryClients retryClients,
     @NotNull @Bean RateLimits rateLimits,
 
-    @NotNull KafkaTopics kafkaTopics
+    @NotNull @Bean ApplicationConfig.KafkaConsumerConfig kafkaConsumerConfig,
+
+    @NotNull @Bean KafkaTopics kafkaTopics
 ) {
     public record BasicURLs(String scrapperBasicURL) {
     }
@@ -35,9 +37,10 @@ public record ApplicationConfig(
     public record RateLimits(Long capacity, Long tokens, Duration period) {
     }
 
-    public record KafkaTopics(KafkaTopic messageTopic) {
+    public record KafkaConsumerConfig(String bootstrapServer, String groupId, String autoOffsetReset, Integer maxPollIntervalMs,
+                                      Boolean enableAutoCommit, Integer concurrency) {
     }
 
-    public record KafkaTopic(String name, Integer partitions, Integer replicas) {
-    }
+    public record KafkaTopics(KafkaTopic messageTopic) {}
+    public record KafkaTopic(String name, Integer partitions, Integer replicas) {}
 }

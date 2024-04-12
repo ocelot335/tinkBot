@@ -14,20 +14,25 @@ app:
     capacity: 10
     tokens: 5
     period: 30s
+  kafka-consumer-config:
+    bootstrapServer: localhost:9092
+    groupId: bot
+    autoOffsetReset: earliest
+    maxPollIntervalMs: 3_000
+    enableAutoCommit: false
+    concurrency: 10
   kafka-topics:
     message-topic:
       name: messages
       partitions: 10
       replicas: 1
 
+
 spring:
   application:
     name: bot
   jackson:
     time-zone: UTC
-  kafka:
-    consumer:
-      auto-offset-reset=earliest
 
 server:
   port: 8090

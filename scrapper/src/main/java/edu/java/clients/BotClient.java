@@ -2,8 +2,9 @@ package edu.java.clients;
 
 import edu.java.clients.dto.ApiErrorResponse;
 import edu.java.clients.dto.LinkUpdate;
+import edu.java.services.IMessageTransporter;
 import io.github.resilience4j.retry.Retry;
-import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,18 +16,12 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class BotClient {
+@AllArgsConstructor
+public class BotClient{
     private final WebClient webClient;
     private final Retry retry;
 
-    @Autowired
-    public BotClient(WebClient webClient, Retry retry) {
-        this.webClient = webClient;
-        this.retry = retry;
-    }
-
-    public void postUpdates(Long id, String url, String description, List<Long> tgChatIds) {
-        LinkUpdate linkUpdate = new LinkUpdate(id, url, description, tgChatIds);
+    public void postUpdates(LinkUpdate linkUpdate) {
         try {
             Mono<Void> request = webClient.post()
                 .uri("/updates")

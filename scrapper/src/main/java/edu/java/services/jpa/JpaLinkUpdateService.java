@@ -4,9 +4,11 @@ import edu.java.clients.BotApiException;
 import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
+import edu.java.clients.dto.LinkUpdate;
 import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.jpa.JpaLinksDAO;
 import edu.java.domain.jpa.entities.LinkEntity;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -20,16 +22,16 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @Slf4j
 public class JpaLinkUpdateService implements ILinkUpdateService {
     private JpaLinksDAO linkRepository;
-    private BotClient botClient;
+    private IMessageTransporter messageTransporter;
     private IAPIClient[] apiClients;
 
     public JpaLinkUpdateService(
         JpaLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients
     ) {
         this.linkRepository = linkRepository;
-        this.botClient = botClient;
+        this.messageTransporter = messageTransporter;
         this.apiClients = apiClients;
     }
 
@@ -98,12 +100,7 @@ public class JpaLinkUpdateService implements ILinkUpdateService {
 
     private void notifyUsers(LinkEntity link, List<Long> userIdsToNotify, String description) {
         try {
-            botClient.postUpdates(
-                link.getId(),
-                link.getUrl(),
-                description,
-                userIdsToNotify
-            );
+            messageTransporter.send(new LinkUpdate(link.getId(), link.getUrl(), description, userIdsToNotify));
         } catch (BotApiException e) {
             log.error(e.getMessage());
         }
