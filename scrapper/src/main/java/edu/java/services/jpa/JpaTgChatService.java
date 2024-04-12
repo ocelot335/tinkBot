@@ -4,7 +4,6 @@ import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.ChatReAddingException;
 import edu.java.domain.jpa.JpaChatsDAO;
 import edu.java.services.interfaces.ITgChatService;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 public class JpaTgChatService implements ITgChatService {
