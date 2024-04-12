@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -17,7 +18,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 @SpringBootTest
 public class GitHubClientTest {
 
+    @Autowired
     private static WireMockServer wireMockServer;
+    @Autowired
     private static WebClient webClient;
 
     @BeforeAll
