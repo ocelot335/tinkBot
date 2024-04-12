@@ -3,6 +3,7 @@ package edu.java.scrapper.clients;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.responses.github.GitHubEventsResponse;
+import edu.java.scrapper.IntegrationTest;
 import io.github.resilience4j.retry.Retry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +17,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
 @SpringBootTest
-public class GitHubClientTest {
+public class GitHubClientTest extends IntegrationTest {
 
     @Autowired
     private static WireMockServer wireMockServer;
