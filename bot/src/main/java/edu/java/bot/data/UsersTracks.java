@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import org.springframework.stereotype.Component;
 
+@Deprecated
 @Component
 public class UsersTracks {
     private HashMap<Long, HashSet<String>> idToURLsMap;

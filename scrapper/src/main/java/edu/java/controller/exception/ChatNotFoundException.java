@@ -7,7 +7,7 @@ public class ChatNotFoundException extends RuntimeException implements IAPIError
 
     @Override
     public String getDescription() {
-        return "Не найден пользователь с таким id";
+        return "Сначала надо пройти регистрацию";
     }
 
     @Override

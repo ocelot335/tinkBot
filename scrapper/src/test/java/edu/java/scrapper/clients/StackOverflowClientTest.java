@@ -1,18 +1,19 @@
 package edu.java.scrapper.clients;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import edu.java.clients.StackOverflowClient;
-import edu.java.responses.StackOverflowResponse;
+import edu.java.clients.apiclients.StackOverflowClient;
+import edu.java.clients.responses.StackOverflowResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
+@SpringBootTest
 public class StackOverflowClientTest {
 
     private static WireMockServer wireMockServer;
@@ -43,9 +44,8 @@ public class StackOverflowClientTest {
             ));
 
         StackOverflowClient stackOverflowClient = new StackOverflowClient(webClient);
-        Mono<StackOverflowResponse> responseMono = stackOverflowClient.fetchQuestion(42);
 
-        StackOverflowResponse response = responseMono.block();
+        StackOverflowResponse response = stackOverflowClient.fetchQuestion("42");
         Assertions.assertEquals("Test Question", response.getItems().get(0).getTitle());
         Assertions.assertEquals("2003-11-23T00:00Z", response.getItems().get(0).getLastActivityDate().toString());
     }

@@ -1,11 +1,14 @@
 package edu.java.bot.services;
 
 import com.pengrad.telegrambot.model.Update;
+import edu.java.bot.clients.ScrapperApiException;
 import edu.java.bot.data.UsersWaiting;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class CommandService {
     private static final String UNDEFIENED_COMMAND_RESPONSE = "Извините, но данная"
         + " комманда не поддерживается, для вывода списка доступных комманд"
@@ -21,18 +24,23 @@ public class CommandService {
     }
 
     public String processCommand(Update update) {
-        String requestToUser = null;
-        requestToUser = checkWaiting(update);
-        if (requestToUser != null) {
-            return requestToUser;
-        }
+        try {
+            String requestToUser = null;
+            requestToUser = checkWaiting(update);
+            if (requestToUser != null) {
+                return requestToUser;
+            }
 
-        String commandNameFromUser = update.message().text();
-        String textToUser = executeCommand(commandNameFromUser, update);
-        if (textToUser != null) {
-            return textToUser;
+            String commandNameFromUser = update.message().text();
+            String textToUser = executeCommand(commandNameFromUser, update);
+            if (textToUser != null) {
+                return textToUser;
+            }
+            return processUndefinedCommand(update);
+        } catch (ScrapperApiException e) {
+            log.error(e.getMessage());
+            return e.getDescription();
         }
-        return processUndefinedCommand(update);
     }
 
     private String checkWaiting(Update update) {

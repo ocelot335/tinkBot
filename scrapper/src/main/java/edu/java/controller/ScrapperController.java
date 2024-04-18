@@ -5,7 +5,8 @@ import edu.java.controller.dto.ApiErrorResponse;
 import edu.java.controller.dto.LinkResponse;
 import edu.java.controller.dto.ListLinkResponse;
 import edu.java.controller.dto.RemoveLinkRequest;
-import edu.java.data.UserTracksService;
+import edu.java.services.interfaces.ISubscribeService;
+import edu.java.services.interfaces.ITgChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,11 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ScrapperController {
+    ITgChatService tgChatService;
+    ISubscribeService subscribeService;
 
-    final private UserTracksService userTracksService;
-
-    public ScrapperController(UserTracksService userTracksService) {
-        this.userTracksService = userTracksService;
+    public ScrapperController(ITgChatService tgChatService, ISubscribeService subscribeService) {
+        this.tgChatService = tgChatService;
+        this.subscribeService = subscribeService;
     }
 
     @PostMapping("/tg-chat/{id}")
@@ -44,7 +45,7 @@ public class ScrapperController {
     })
     @Operation(summary = "Зарегистрировать чат")
     public ResponseEntity<Void> postTgChat(@PathVariable(name = "id") Long id) {
-        userTracksService.addUser(id);
+        tgChatService.addUser(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -62,7 +63,7 @@ public class ScrapperController {
     })
     @Operation(summary = "Удалить чат")
     public ResponseEntity<Void> deleteTgChat(@PathVariable(name = "id") Long id) {
-        userTracksService.removeUser(id);
+        tgChatService.remove(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -79,8 +80,8 @@ public class ScrapperController {
     })
     @Operation(summary = "Получить все отслеживаемые ссылки")
     public ResponseEntity<ListLinkResponse> getLinks(@RequestHeader(name = "Tg-Chat-Id") Long id) {
-        List<URI> urls = userTracksService.getTrackedURLs(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ListLinkResponse(urls));
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(new ListLinkResponse(subscribeService.getTrackedURLs(id)));
     }
 
     @PostMapping("/links")
@@ -96,7 +97,7 @@ public class ScrapperController {
         @RequestHeader(name = "Tg-Chat-Id") Long id,
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) throws URISyntaxException {
-        Long linkId = userTracksService.addTrackedURLs(id, addLinkRequest.getLink());
+        Long linkId = subscribeService.addTrackedURLs(id, addLinkRequest.getLink());
         return ResponseEntity.status(HttpStatus.OK).body(new LinkResponse(linkId, new URI(addLinkRequest.getLink())));
     }
 
@@ -117,7 +118,7 @@ public class ScrapperController {
         @RequestHeader(name = "Tg-Chat-Id") Long id,
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) throws URISyntaxException {
-        Long linkId = userTracksService.removeTrackedURLs(id, removeLinkRequest.getLink());
+        Long linkId = subscribeService.removeTrackedURLs(id, removeLinkRequest.getLink());
         return ResponseEntity.status(HttpStatus.OK)
             .body(new LinkResponse(linkId, new URI(removeLinkRequest.getLink())));
     }

@@ -1,4 +1,4 @@
-package edu.java.data;
+package edu.java.domain;
 
 import edu.java.controller.exception.CantHandleURLException;
 import edu.java.controller.exception.ChatNotFoundException;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.springframework.stereotype.Component;
 
+@Deprecated
 @Component
 public class UserTracksService {
     private HashMap<Long, ArrayList<URI>> idToURLsMap;
@@ -96,7 +97,6 @@ public class UserTracksService {
     }
 
     private void throwBadURLException(String url) {
-
         throw new CantHandleURLException("Сервис не может обработать ссылку: " + url);
     }
 
