@@ -7,6 +7,7 @@ import edu.java.controller.dto.ListLinkResponse;
 import edu.java.controller.dto.RemoveLinkRequest;
 import edu.java.services.interfaces.ISubscribeService;
 import edu.java.services.interfaces.ITgChatService;
+import edu.java.services.metrics.CounterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,10 +30,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScrapperController {
     ITgChatService tgChatService;
     ISubscribeService subscribeService;
+    CounterService counterService;
 
-    public ScrapperController(ITgChatService tgChatService, ISubscribeService subscribeService) {
+    public ScrapperController(
+        ITgChatService tgChatService,
+        ISubscribeService subscribeService,
+        CounterService counterService
+    ) {
         this.tgChatService = tgChatService;
         this.subscribeService = subscribeService;
+        this.counterService = counterService;
     }
 
     @PostMapping("/tg-chat/{id}")
@@ -46,6 +53,7 @@ public class ScrapperController {
     @Operation(summary = "Зарегистрировать чат")
     public ResponseEntity<Void> postTgChat(@PathVariable(name = "id") Long id) {
         tgChatService.addUser(id);
+        counterService.successfulRequestsCounterIncrement();
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -64,6 +72,7 @@ public class ScrapperController {
     @Operation(summary = "Удалить чат")
     public ResponseEntity<Void> deleteTgChat(@PathVariable(name = "id") Long id) {
         tgChatService.remove(id);
+        counterService.successfulRequestsCounterIncrement();
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -80,8 +89,10 @@ public class ScrapperController {
     })
     @Operation(summary = "Получить все отслеживаемые ссылки")
     public ResponseEntity<ListLinkResponse> getLinks(@RequestHeader(name = "Tg-Chat-Id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
+        ResponseEntity<ListLinkResponse> response = ResponseEntity.status(HttpStatus.OK)
             .body(new ListLinkResponse(subscribeService.getTrackedURLs(id)));
+        counterService.successfulRequestsCounterIncrement();
+        return response;
     }
 
     @PostMapping("/links")
@@ -98,7 +109,10 @@ public class ScrapperController {
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) throws URISyntaxException {
         Long linkId = subscribeService.addTrackedURLs(id, addLinkRequest.getLink());
-        return ResponseEntity.status(HttpStatus.OK).body(new LinkResponse(linkId, new URI(addLinkRequest.getLink())));
+        ResponseEntity<LinkResponse> response =
+            ResponseEntity.status(HttpStatus.OK).body(new LinkResponse(linkId, new URI(addLinkRequest.getLink())));
+        counterService.successfulRequestsCounterIncrement();
+        return response;
     }
 
     @DeleteMapping("/links")
@@ -119,7 +133,9 @@ public class ScrapperController {
         @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) throws URISyntaxException {
         Long linkId = subscribeService.removeTrackedURLs(id, removeLinkRequest.getLink());
-        return ResponseEntity.status(HttpStatus.OK)
+        ResponseEntity<LinkResponse> response = ResponseEntity.status(HttpStatus.OK)
             .body(new LinkResponse(linkId, new URI(removeLinkRequest.getLink())));
+        counterService.successfulRequestsCounterIncrement();
+        return response;
     }
 }

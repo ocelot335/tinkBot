@@ -1,6 +1,7 @@
 package edu.java.bot.services;
 
 import edu.java.bot.controller.dto.LinkUpdate;
+import edu.java.bot.services.metrics.CounterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class MessageKafkaListener {
     private final HandleLinkUpdateService handler;
     private final KafkaMessageDlqService dlqService;
+    private final CounterService counterService;
 
     @KafkaListener(topics = "#{@kafkaTopics.messagesTopic.name}", containerFactory = "messagesContainerFactory")
     public void handleMessage(@Payload LinkUpdate message, Acknowledgment acknowledgment) {
@@ -23,6 +25,7 @@ public class MessageKafkaListener {
                 "Получено новое сообщение от Kafka: обновление на " + message.getUrl() + " для "
                     + message.getTgChatIds());
             acknowledgment.acknowledge();
+            counterService.successfulRequestsCounterIncrement();
         } catch (Exception e) {
             log.error("Произошла следующая ошибка: " + e.getMessage());
             dlqService.sendDlq(message);

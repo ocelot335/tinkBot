@@ -3,6 +3,7 @@ package edu.java.bot.controller;
 import edu.java.bot.controller.dto.ApiErrorResponse;
 import edu.java.bot.controller.dto.LinkUpdate;
 import edu.java.bot.services.HandleLinkUpdateService;
+import edu.java.bot.services.metrics.CounterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class BotController {
     private final HandleLinkUpdateService handler;
+    private final CounterService counterService;
 
     @PostMapping("/updates")
     @ApiResponses(value = {
@@ -33,6 +35,7 @@ public class BotController {
     @Operation(summary = "Отправить обновление")
     public ResponseEntity<Void> postUpdates(@RequestBody @Valid LinkUpdate body) {
         handler.handle(body);
+        counterService.successfulRequestsCounterIncrement();
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }
