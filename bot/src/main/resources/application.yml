@@ -48,6 +48,21 @@ spring:
 server:
   port: 8090
 
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: ""
+      path-mapping:
+        prometheus: "/metrics"
+      exposure:
+        include: "info,health,prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+
 springdoc.swagger-ui.path: /swagger-ui
 
 logging:
