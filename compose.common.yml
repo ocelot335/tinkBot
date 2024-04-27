@@ -1,32 +1,4 @@
 services:
-  postgresql:
-    image: postgres:16
-    ports:
-      - "54320:5432"
-    environment:
-      POSTGRES_DB: scrapper
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - postgresql:/var/lib/postgresql/data
-    networks:
-      - backend
-  liquibase-migrations:
-    image: liquibase/liquibase:4.25
-    depends_on:
-      - postgresql
-    command:
-      - --changelog-file=master.xml
-      - --driver=org.postgresql.Driver
-      - --url=jdbc:postgresql://postgresql:5432/scrapper
-      - --username=postgres
-      - --password=postgres
-      - update
-    volumes:
-      - ./migrations:/liquibase/changelog
-    networks:
-      - backend
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zookeeper
@@ -40,6 +12,9 @@ services:
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
       - zookeeper_log:/var/lib/zookeeper/log
+    networks:
+      - backend
+
   kafka:
     image: confluentinc/cp-kafka:7.3.2
     hostname: kafka
@@ -66,6 +41,8 @@ services:
       - kafka_data:/var/lib/kafka/data
     depends_on:
       - zookeeper
+    networks:
+      - backend
 
   prometheus:
     image: prom/prometheus
@@ -74,6 +51,8 @@ services:
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"
+    networks:
+      - backend
 
   grafana:
     image: grafana/grafana-oss
@@ -83,10 +62,11 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+    networks:
+      - backend
 
 
 volumes:
-  postgresql: { }
   zookeeper_data: { }
   zookeeper_log: { }
   kafka_data: { }

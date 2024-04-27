@@ -1,0 +1,57 @@
+services:
+  scrapper:
+    image: scrapper
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: 5432
+      KAFKA_HOST: host.docker.internal
+      KAFKA_PORT: 29092
+      BOT_HOST: host.docker.internal
+    depends_on:
+      - postgresql
+      - liquibase-migrations
+    networks:
+      - backend
+    profiles:
+      - docker
+
+  postgresql:
+    image: postgres:16
+    ports:
+      - "54320:5432"
+    environment:
+      POSTGRES_DB: scrapper
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+  liquibase-migrations:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - postgresql
+    command:
+      - --changelog-file=master.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql:5432/scrapper
+      - --username=postgres
+      - --password=postgres
+      - update
+    volumes:
+      - ./migrations:/liquibase/changelog
+    networks:
+      - backend
+
+
+volumes:
+  postgresql: { }
+  zookeeper_data: { }
+  zookeeper_log: { }
+  kafka_data: { }
+
+networks:
+  backend: { }
