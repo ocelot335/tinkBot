@@ -37,7 +37,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: push image
-        run: docker push ghcr.io/${{ github.actor }}/bot:latest
+        run: |
+          docker tag bot ghcr.io/${{ github.actor }}/bot:latest
+          docker push ghcr.io/${{ github.actor }}/bot:latest
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
