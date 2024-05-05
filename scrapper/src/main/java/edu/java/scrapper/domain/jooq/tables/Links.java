@@ -76,7 +76,8 @@ public class Links extends TableImpl<LinksRecord> {
     /**
      * The column <code>LINKS.CHECKED_AT</code>.
      */
-    public final TableField<LinksRecord, OffsetDateTime> CHECKED_AT = createField(DSL.name("CHECKED_AT"),
+    public final TableField<LinksRecord, OffsetDateTime> CHECKED_AT = createField(
+        DSL.name("CHECKED_AT"),
         SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false)
             .defaultValue(DSL.field(DSL.raw("LOCALTIMESTAMP"), SQLDataType.TIMESTAMPWITHTIMEZONE)),
         this,
@@ -86,7 +87,8 @@ public class Links extends TableImpl<LinksRecord> {
     /**
      * The column <code>LINKS.LAST_UPDATED_AT</code>.
      */
-    public final TableField<LinksRecord, OffsetDateTime> LAST_UPDATED_AT = createField(DSL.name("LAST_UPDATED_AT"),
+    public final TableField<LinksRecord, OffsetDateTime> LAST_UPDATED_AT = createField(
+        DSL.name("LAST_UPDATED_AT"),
         SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false)
             .defaultValue(DSL.field(DSL.raw("LOCALTIMESTAMP"), SQLDataType.TIMESTAMPWITHTIMEZONE)),
         this,

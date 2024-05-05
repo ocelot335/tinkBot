@@ -32,7 +32,10 @@ public class ListCommand implements ICommand {
     @Override
     public String processCommand(Update update) {
         ListLinkResponse links = scrapperClient.getLinks(update.message().chat().id());
-        if (links == null || links.getSize() == 0) {
+        if (links == null) {
+            return SCRAPPER_ERROR;
+        }
+        if (links.getSize() == 0) {
             return NO_TRACKED;
         } else {
             StringBuilder stringBuilder = new StringBuilder();

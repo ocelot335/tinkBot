@@ -1,7 +1,7 @@
 package edu.java.domain.jooq;
 
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import java.util.List;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -28,15 +28,18 @@ public class JooqSubscribesDAO {
             .execute();
     }
 
+    @Transactional(readOnly = true)
     public List<SubscribeDTO> findAllSubscribes() {
         return dslContext.selectFrom(SUBSCRIBES).fetchInto(SubscribeDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAllLinksByChatId(Long chatId) {
         return dslContext.selectFrom(LINKS).where(LINKS.ID.in(dslContext.select(SUBSCRIBES.LINKID).from(SUBSCRIBES)
             .where(SUBSCRIBES.CHATID.eq(chatId)))).fetchInto(LinkDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public boolean contains(Long chatId, Long urlId) {
         return dslContext.selectCount().from(SUBSCRIBES).where(SUBSCRIBES.CHATID.eq(chatId))
             .and(SUBSCRIBES.LINKID.eq(urlId)).fetchOne().value1() > 0;

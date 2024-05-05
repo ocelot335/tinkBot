@@ -44,7 +44,10 @@ public class UntrackCommand implements ICommand {
 
     private String removeURL(Update update) {
         usersWaiting.setWaiting(update.message().chat().id(), usersWaiting.getDefaultWaiting());
-        scrapperClient.deleteLink(update.message().chat().id(), update.message().text());
-        return URL_REMOVED;
+        if (scrapperClient.deleteLink(update.message().chat().id(), update.message().text()) != null) {
+            return URL_REMOVED;
+        } else {
+            return SCRAPPER_ERROR;
+        }
     }
 }

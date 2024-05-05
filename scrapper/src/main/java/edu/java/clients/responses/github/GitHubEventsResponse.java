@@ -2,6 +2,7 @@ package edu.java.clients.responses.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.java.clients.responses.IAPIResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Data;
@@ -12,7 +13,7 @@ public class GitHubEventsResponse {
     private List<Event> events;
 
     @Data
-    public static class Event {
+    public static class Event implements IAPIResponse {
         private String type;
         @JsonProperty("created_at")
         private OffsetDateTime createdAt;
@@ -35,6 +36,11 @@ public class GitHubEventsResponse {
             description += " произошло в ";
             description += createdAt.toString();
             return description;
+        }
+
+        @Override
+        public OffsetDateTime getLastUpdatedAt() {
+            return createdAt;
         }
     }
 }

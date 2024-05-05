@@ -2,6 +2,42 @@ app:
   telegram-token: ${telegramToken}
   basic-urls:
     scrapper-basic-url: http://localhost:8080
+  retry-clients:
+    scrapper-retry:
+      retry-mode: linear
+      retry-codes:
+        - 400
+        - 404
+      duration: 500ms
+      max-attempts: 3
+  rate-limits:
+    capacity: 10
+    tokens: 5
+    period: 30s
+  kafka-consumer-config:
+    bootstrapServer: localhost:9092
+    groupId: bot
+    autoOffsetReset: earliest
+    maxPollIntervalMs: 3_000
+    enableAutoCommit: false
+    concurrency: 10
+  kafka-producer-config:
+    bootstrap-server: localhost:9092
+    client-id: scrapper
+    acks-mode: 1
+    delivery-timeout: 60s
+    linger-ms: 12_000
+    batch-size: 100_000
+  kafka-topics:
+    messages-topic:
+      name: messages
+      partitions: 10
+      replicas: 1
+    messages-dlq-topic:
+      name: messages_dlq
+      partitions: 10
+      replicas: 1
+
 
 spring:
   application:

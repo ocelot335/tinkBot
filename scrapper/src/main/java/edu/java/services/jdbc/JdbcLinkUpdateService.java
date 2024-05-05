@@ -1,34 +1,34 @@
 package edu.java.services.jdbc;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.apiclients.GitHubClient;
 import edu.java.clients.apiclients.IAPIClient;
+import edu.java.clients.dto.LinkUpdate;
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
+import edu.java.services.IMessageTransporter;
 import edu.java.services.interfaces.ILinkUpdateService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
-import lombok.SneakyThrows;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class JdbcLinkUpdateService implements ILinkUpdateService {
     private JdbcLinksDAO linkRepository;
     private JdbcSubscribesDAO subscribesRepository;
-    private BotClient botClient;
+    private IMessageTransporter messageTransporter;
     private IAPIClient[] apiClients;
 
     public JdbcLinkUpdateService(
         JdbcLinksDAO linkRepository,
-        BotClient botClient,
+        IMessageTransporter messageTransporter,
         IAPIClient[] apiClients,
         JdbcSubscribesDAO subscribesRepository
     ) {
         this.linkRepository = linkRepository;
-        this.botClient = botClient;
+        this.messageTransporter = messageTransporter;
         this.apiClients = apiClients;
         this.subscribesRepository = subscribesRepository;
     }
@@ -52,14 +52,13 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
         }
     }
 
-    @SneakyThrows
     private boolean check(LinkDTO link) {
         for (IAPIClient client : apiClients) {
             if (client.isCorrectURL(link.getUrl())) {
                 OffsetDateTime lastUpdatedAt;
                 try {
                     lastUpdatedAt = client.getResponse(link).getLastUpdatedAt();
-                } catch (WebClientResponseException e) {
+                } catch (WebClientResponseException | NullPointerException e) {
                     continue;
                     //TODO::handle not existing urls ?? Maybe delete from DataBase?
                 }
@@ -92,6 +91,6 @@ public class JdbcLinkUpdateService implements ILinkUpdateService {
         List<Long> usersToNotify =
             subscribes.stream().filter(subscribeDTO -> Objects.equals(subscribeDTO.getLinkId(), link.getId()))
                 .map(SubscribeDTO::getChatId).toList();
-        botClient.postUpdates(link.getId(), link.getUrl(), description, usersToNotify);
+        messageTransporter.send(new LinkUpdate(link.getId(), link.getUrl(), description, usersToNotify));
     }
 }

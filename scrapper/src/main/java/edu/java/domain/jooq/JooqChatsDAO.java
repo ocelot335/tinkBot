@@ -1,6 +1,6 @@
 package edu.java.domain.jooq;
 
-import edu.java.domain.jdbc.dto.ChatDTO;
+import edu.java.domain.dto.ChatDTO;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
@@ -27,10 +27,12 @@ public class JooqChatsDAO {
         dslContext.deleteFrom(CHATS).where(CHATS.TELEGRAMID.eq(telegramId)).execute();
     }
 
+    @Transactional(readOnly = true)
     public List<ChatDTO> findAll() {
         return dslContext.select(CHATS.fields()).from(CHATS).fetchInto(ChatDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public boolean contains(Long chatId) {
         return dslContext.selectCount().from(CHATS).where(CHATS.TELEGRAMID.eq(chatId)).fetchOne().value1() > 0;
     }

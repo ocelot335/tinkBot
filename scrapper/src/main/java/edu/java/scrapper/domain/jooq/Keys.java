@@ -37,7 +37,8 @@ public class Keys {
 
     public static final UniqueKey<ChatsRecord> CHATS_PKEY =
         Internal.createUniqueKey(Chats.CHATS, DSL.name("CHATS_PKEY"), new TableField[] {Chats.CHATS.TELEGRAMID}, true);
-    public static final UniqueKey<ChatsRecord> CONSTRAINT_3 = Internal.createUniqueKey(Chats.CHATS,
+    public static final UniqueKey<ChatsRecord> CONSTRAINT_3 = Internal.createUniqueKey(
+        Chats.CHATS,
         DSL.name("CONSTRAINT_3"),
         new TableField[] {Chats.CHATS.TELEGRAMID},
         true

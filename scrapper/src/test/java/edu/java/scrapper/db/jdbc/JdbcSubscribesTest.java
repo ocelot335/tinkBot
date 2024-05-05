@@ -1,10 +1,10 @@
 package edu.java.scrapper.db.jdbc;
 
+import edu.java.domain.dto.LinkDTO;
+import edu.java.domain.dto.SubscribeDTO;
 import edu.java.domain.jdbc.JdbcChatsDAO;
 import edu.java.domain.jdbc.JdbcLinksDAO;
 import edu.java.domain.jdbc.JdbcSubscribesDAO;
-import edu.java.domain.jdbc.dto.LinkDTO;
-import edu.java.domain.jdbc.dto.SubscribeDTO;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import java.util.Objects;
@@ -111,5 +111,31 @@ public class JdbcSubscribesTest extends IntegrationTest {
 
         List<SubscribeDTO> links = subscribeRepository.findAllSubscribes();
         Assertions.assertEquals(3, links.size());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testFindAllLinksByChatId() {
+        linkRepository.add("java");
+        linkRepository.add("kotlin");
+        chatRepository.add(1L);
+        chatRepository.add(2L);
+        Long linkIdJava = linkRepository.getId("java");
+        Long linkIdKotlin = linkRepository.getId("kotlin");
+        subscribeRepository.add(1L, linkIdJava);
+        subscribeRepository.add(1L, linkIdKotlin);
+        subscribeRepository.add(2L, linkIdKotlin);
+
+        List<LinkDTO> linksFirst = subscribeRepository.findAllLinksByChatId(1L);
+        Assertions.assertTrue(Objects.equals(linksFirst.get(0).getId(), linkIdKotlin) ||
+            Objects.equals(linksFirst.get(1).getId(), linkIdKotlin));
+        Assertions.assertTrue(Objects.equals(linksFirst.get(0).getId(), linkIdJava) ||
+            Objects.equals(linksFirst.get(1).getId(), linkIdJava));
+        Assertions.assertEquals(2, linksFirst.size());
+
+        List<LinkDTO> linksSecond = subscribeRepository.findAllLinksByChatId(2L);
+        Assertions.assertEquals(linksSecond.get(0).getId(), linkIdKotlin);
+        Assertions.assertEquals(1, linksSecond.size());
     }
 }

@@ -1,4 +1,4 @@
-package edu.java.domain.jdbc.dto;
+package edu.java.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;

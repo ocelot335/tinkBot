@@ -6,7 +6,7 @@ import edu.java.controller.exception.CantHandleURLException;
 import edu.java.controller.exception.ChatNotFoundException;
 import edu.java.controller.exception.LinkNotFoundException;
 import edu.java.controller.exception.LinkReAddingException;
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import edu.java.domain.jooq.JooqChatsDAO;
 import edu.java.domain.jooq.JooqLinksDAO;
 import edu.java.domain.jooq.JooqSubscribesDAO;

@@ -1,6 +1,6 @@
 package edu.java.domain.jooq;
 
-import edu.java.domain.jdbc.dto.LinkDTO;
+import edu.java.domain.dto.LinkDTO;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -35,10 +35,12 @@ public class JooqLinksDAO {
         dslContext.deleteFrom(LINKS).where(LINKS.URL.eq(url)).execute();
     }
 
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAll() {
         return dslContext.selectFrom(LINKS).fetchInto(LinkDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public List<LinkDTO> findAllFilteredToCheck(Duration forceCheckDelay) {
         List<LinkDTO> links = dslContext.selectFrom(LINKS)
             .where(LINKS.CHECKED_AT.plus(new YearToSecond(
@@ -49,10 +51,12 @@ public class JooqLinksDAO {
         return links;
     }
 
+    @Transactional(readOnly = true)
     public Long getId(String url) {
         return dslContext.selectFrom(LINKS).where(LINKS.URL.eq(url)).fetchOne().getId();
     }
 
+    @Transactional(readOnly = true)
     public boolean contains(String url) {
         return dslContext.selectCount().from(LINKS).where(LINKS.URL.eq(url))
             .fetchOne().value1() > 0;
