@@ -8,7 +8,7 @@ app:
   basic-urls:
     git-hub-basic-url: ${GITHUB_BASE_URL:https://api.github.com}
     stack-overflow-basic-url: ${STACKOVERFLOW_BASE_URL:https://api.stackexchange.com/2.3/}
-    bot-basic-url: ${BOT_BASE_URL:http://localhost:8090}
+    bot-basic-url: http://${BOT_HOST:localhost}:8090
   retry-clients:
     bot-retry:
       retry-mode: linear
@@ -36,7 +36,7 @@ app:
     tokens: 5
     period: 30s
   kafka-producer-config:
-    bootstrap-server: localhost:9092
+    bootstrap-server: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     client-id: scrapper
     acks-mode: 1
     delivery-timeout: 60s
@@ -50,7 +50,7 @@ spring:
   application:
     name: scrapper
   datasource:
-    url: jdbc:postgresql://localhost:54320/scrapper
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:54320}/scrapper
     username: postgres
     password: postgres
   liquibase:
@@ -58,6 +58,21 @@ spring:
 
 server:
   port: 8080
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: ""
+      path-mapping:
+        prometheus: "/metrics"
+      exposure:
+        include: "info,health,prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 
 springdoc.swagger-ui.path: /swagger-ui
 

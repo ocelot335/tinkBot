@@ -1,7 +1,7 @@
 app:
   telegram-token: ${telegramToken}
   basic-urls:
-    scrapper-basic-url: http://localhost:8080
+    scrapper-basic-url: http://${SCRAPPER_HOST:localhost}:8080
   retry-clients:
     scrapper-retry:
       retry-mode: linear
@@ -15,14 +15,14 @@ app:
     tokens: 5
     period: 30s
   kafka-consumer-config:
-    bootstrapServer: localhost:9092
+    bootstrapServer: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     groupId: bot
     autoOffsetReset: earliest
     maxPollIntervalMs: 3_000
     enableAutoCommit: false
     concurrency: 10
   kafka-producer-config:
-    bootstrap-server: localhost:9092
+    bootstrap-server: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     client-id: scrapper
     acks-mode: 1
     delivery-timeout: 60s
@@ -47,6 +47,21 @@ spring:
 
 server:
   port: 8090
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: ""
+      path-mapping:
+        prometheus: "/metrics"
+      exposure:
+        include: "info,health,prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 
 springdoc.swagger-ui.path: /swagger-ui
 

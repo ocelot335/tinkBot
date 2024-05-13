@@ -1,0 +1,19 @@
+services:
+  bot:
+    image: bot
+    ports:
+      - "8090:8090"
+      - "8091:8091"
+    environment:
+      KAFKA_HOST: host.docker.internal
+      KAFKA_PORT: 29092
+      SCRAPPER_HOST: host.docker.internal
+    env_file:
+      - bot/secrets.env
+    profiles:
+      - docker
+    networks:
+      - backend
+
+networks:
+  backend: { }

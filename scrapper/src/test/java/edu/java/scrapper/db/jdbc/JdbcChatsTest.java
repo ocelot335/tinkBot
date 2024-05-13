@@ -23,7 +23,7 @@ public class JdbcChatsTest extends IntegrationTest {
         chatRepository.add(1L);
         Assertions.assertEquals(1L, chatRepository.findAll().get(0).getTelegramId());
         Assertions.assertEquals(1, chatRepository.findAll().size());
-
+        
         chatRepository.add(2L);
         List<ChatDTO> chats = chatRepository.findAll();
         Assertions.assertEquals(2, chats.size());
